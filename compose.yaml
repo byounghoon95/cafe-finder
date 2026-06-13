@@ -1,0 +1,26 @@
+﻿services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: cafe-radar-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-cafe_radar}
+      POSTGRES_USER: ${POSTGRES_USER:-cafe_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cafe_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:

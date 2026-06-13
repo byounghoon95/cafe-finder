@@ -45,13 +45,4 @@ POSTGRES_PASSWORD=cafe_password
 
 PostGIS is enabled by `infra/postgres/init/01-postgis.sql` on first database initialization.
 Backend and frontend Compose services will be added when those app foundations are implemented.
-## AI Tooling
-
-This project is managed with a task-based Codex workflow. Planning and documentation use repository-local task files under `docs/tasks/`, and implementation tasks are intended to be executed with a Codex skill-style process:
-
-```text
-read project spec -> read task file -> implement scoped change -> verify -> update task notes
-```
-
-AI assistance is used for scaffolding, task planning, documentation, and implementation support. Core technical decisions, verification results, and project scope are recorded in the task files so the development process stays reviewable.
 

@@ -337,5 +337,17 @@ Out of MVP:
 - owner/admin dashboards
 - scraping real cafe data
 - machine learning recommendations
+## 12. Development Workflow
 
+Development follows the task-board workflow in `docs/tasks/README.md`.
+
+For each task:
+
+- Read `AGENTS.md`, `docs/SPEC.md`, `docs/tasks/README.md`, and the requested task file.
+- Keep the change scoped to the task acceptance criteria.
+- Run relevant verification commands.
+- Update the task status and completion notes with changed files, verification results, and important decisions.
+- Record AI/tooling usage when a task is completed.
+
+Codex skill-style execution may be used for task implementation. The expected pattern is: understand the task boundary, inspect existing files, make small changes, verify, and document the result.
 

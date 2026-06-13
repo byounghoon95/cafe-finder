@@ -62,3 +62,15 @@ Run focused backend tests from the backend directory when Java and the Gradle wr
 
 The frontend Compose service will be added when the frontend foundation is implemented.
 
+## Local Frontend
+
+Install and start the React/Vite app:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+The app runs on `http://localhost:5173` by default. Use `frontend/.env.local` for local frontend-only values such as `VITE_API_BASE_URL` or `VITE_GOOGLE_MAPS_API_KEY`.
+

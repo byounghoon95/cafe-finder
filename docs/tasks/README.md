@@ -45,7 +45,7 @@ When a task is finished, update the task file with:
 | backend TASK-05 | ⬜ todo | backend TASK-04 | [05-backend-tests.md](backend/05-backend-tests.md) |
 | frontend TASK-01 | ✅ done | foundation TASK-01 | [01-react-vite-foundation.md](frontend/01-react-vite-foundation.md) |
 | frontend TASK-02 | ✅ done | frontend TASK-01, backend TASK-03 | [02-map-search-ui.md](frontend/02-map-search-ui.md) |
-| frontend TASK-03 | ⬜ todo | frontend TASK-02, backend TASK-03 | [03-cafe-results-panel.md](frontend/03-cafe-results-panel.md) |
+| frontend TASK-03 | ✅ done | frontend TASK-02, backend TASK-03 | [03-cafe-results-panel.md](frontend/03-cafe-results-panel.md) |
 | frontend TASK-04 | ⬜ todo | frontend TASK-03, backend TASK-04 | [04-filters-and-scoring-ui.md](frontend/04-filters-and-scoring-ui.md) |
 | frontend TASK-05 | ⬜ todo | frontend TASK-04 | [05-frontend-smoke-tests.md](frontend/05-frontend-smoke-tests.md) |
 | infra TASK-02 | ⬜ todo | backend TASK-02 | [02-demo-data-seed.md](infra/02-demo-data-seed.md) |

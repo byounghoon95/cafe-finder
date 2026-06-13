@@ -1,12 +1,23 @@
 import {
   radiusOptions,
+  type CafeSort,
   type RadiusMeters,
   useSearchStore,
 } from "../store/searchStore";
 
+const sortOptions: { value: CafeSort; label: string }[] = [
+  { value: "distance", label: "Distance" },
+  { value: "rating", label: "Rating" },
+  { value: "reviews", label: "Reviews" },
+  { value: "quiet", label: "Quiet" },
+  { value: "recommendation", label: "Recommended" },
+];
+
 export function SearchControls() {
   const radiusMeters = useSearchStore((state) => state.radiusMeters);
+  const sort = useSearchStore((state) => state.sort);
   const setRadiusMeters = useSearchStore((state) => state.setRadiusMeters);
+  const setSort = useSearchStore((state) => state.setSort);
   const setSelectedPoint = useSearchStore((state) => state.setSelectedPoint);
 
   const useCurrentLocation = () => {
@@ -47,6 +58,20 @@ export function SearchControls() {
           </button>
         ))}
       </div>
+      <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+        Sort
+        <select
+          className="rounded-md border border-stone-300 bg-white px-2 py-2 text-sm text-cafe-ink"
+          value={sort}
+          onChange={(event) => setSort(event.target.value as CafeSort)}
+        >
+          {sortOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 }

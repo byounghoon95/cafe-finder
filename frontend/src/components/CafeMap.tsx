@@ -4,6 +4,7 @@ import {
   type SearchPoint,
   useSearchStore,
 } from "../store/searchStore";
+import type { Cafe } from "../types";
 
 type LatLng = {
   lat: () => number;
@@ -23,6 +24,8 @@ type GoogleMap = {
 };
 
 type GoogleMarker = {
+  addListener: (eventName: "click", handler: () => void) => void;
+  setMap: (map: GoogleMap | null) => void;
   setPosition: (point: SearchPoint) => void;
 };
 
@@ -51,6 +54,12 @@ declare global {
 
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const googleMapsLoaders = new Map<string, Promise<GoogleMapsApi>>();
+
+type CafeMapProps = {
+  cafes?: Cafe[];
+  selectedCafeId?: number | null;
+  onSelectCafe?: (cafeId: number) => void;
+};
 
 function loadGoogleMaps(apiKey: string | undefined): Promise<GoogleMapsApi> {
   if (!apiKey) {
@@ -96,10 +105,15 @@ function loadGoogleMaps(apiKey: string | undefined): Promise<GoogleMapsApi> {
   return loader;
 }
 
-export function CafeMap() {
+export function CafeMap({
+  cafes = [],
+  selectedCafeId = null,
+  onSelectCafe,
+}: CafeMapProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<GoogleMap | null>(null);
   const markerRef = useRef<GoogleMarker | null>(null);
+  const cafeMarkersRef = useRef<GoogleMarker[]>([]);
   const circleRef = useRef<GoogleCircle | null>(null);
   const [mapError, setMapError] = useState("");
   const selectedPoint = useSearchStore((state) => state.selectedPoint);
@@ -178,14 +192,49 @@ export function CafeMap() {
     map.panTo(selectedPoint);
   }, [selectedPoint, radiusMeters]);
 
+  useEffect(() => {
+    const maps = window.google?.maps;
+    const map = mapRef.current;
+
+    if (!maps || !map) {
+      return;
+    }
+
+    cafeMarkersRef.current.forEach((marker) => marker.setMap(null));
+    cafeMarkersRef.current = cafes.map((cafe) => {
+      const marker = new maps.Marker({
+        label: cafe.id === selectedCafeId ? "✓" : "C",
+        map,
+        position: { lat: cafe.latitude, lng: cafe.longitude },
+        title: cafe.name,
+      });
+
+      marker.addListener("click", () => onSelectCafe?.(cafe.id));
+      return marker;
+    });
+  }, [cafes, onSelectCafe, selectedCafeId]);
+
   if (mapError) {
-    return <MapFallback error={mapError} />;
+    return (
+      <MapFallback
+        cafes={cafes}
+        error={mapError}
+        selectedCafeId={selectedCafeId}
+        onSelectCafe={onSelectCafe}
+      />
+    );
   }
 
   return <div ref={mapNode} className="h-full w-full" aria-label="Cafe map" />;
 }
 
-function MapFallback({ error }: { error: string }) {
+function MapFallback({
+  cafes,
+  error,
+  selectedCafeId,
+  onSelectCafe,
+}: Required<Pick<CafeMapProps, "cafes">> &
+  Pick<CafeMapProps, "selectedCafeId" | "onSelectCafe"> & { error: string }) {
   const selectedPoint = useSearchStore((state) => state.selectedPoint);
   const setSelectedPoint = useSearchStore((state) => state.setSelectedPoint);
 
@@ -200,6 +249,24 @@ function MapFallback({ error }: { error: string }) {
       {selectedPoint ? (
         <div className="absolute bottom-24 left-1/2 h-5 w-5 -translate-x-1/2 rounded-full border-2 border-white bg-emerald-500 shadow-lg" />
       ) : null}
+      <div className="absolute right-4 top-24 flex flex-col gap-2">
+        {cafes.map((cafe) => (
+          <span
+            className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-bold shadow-lg ${
+              cafe.id === selectedCafeId
+                ? "bg-cafe-leaf text-white"
+                : "bg-white text-cafe-ink"
+            }`}
+            key={cafe.id}
+            onClick={(event) => {
+              event.stopPropagation();
+              onSelectCafe?.(cafe.id);
+            }}
+          >
+            {cafe.priceLevel}
+          </span>
+        ))}
+      </div>
       <div className="absolute bottom-4 left-4 max-w-sm rounded-lg bg-white/95 p-3 text-sm shadow-panel">
         <p className="font-semibold text-cafe-ink">Map preview mode</p>
         <p className="mt-1 text-slate-700">

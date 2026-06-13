@@ -46,3 +46,15 @@ POSTGRES_PASSWORD=cafe_password
 PostGIS is enabled by `infra/postgres/init/01-postgis.sql` on first database initialization.
 Backend and frontend Compose services will be added when those app foundations are implemented.
 
+## Local Frontend
+
+Install and start the React/Vite app:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+The app runs on `http://localhost:5173` by default. Use `frontend/.env.local` for local frontend-only values such as `VITE_API_BASE_URL` or `VITE_GOOGLE_MAPS_API_KEY`.
+

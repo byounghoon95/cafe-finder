@@ -1,13 +1,58 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  DEFAULT_CENTER,
+  defaultCenter,
+  type SearchPoint,
   useSearchStore,
-} from "../store/searchStore.js";
+} from "../store/searchStore";
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-const googleMapsLoaders = new Map();
+type LatLng = {
+  lat: () => number;
+  lng: () => number;
+};
 
-function loadGoogleMaps(apiKey) {
+type MapMouseEvent = {
+  latLng: LatLng;
+};
+
+type GoogleMap = {
+  addListener: (
+    eventName: "click",
+    handler: (event: MapMouseEvent) => void,
+  ) => void;
+  panTo: (point: SearchPoint) => void;
+};
+
+type GoogleMarker = {
+  setPosition: (point: SearchPoint) => void;
+};
+
+type GoogleCircle = {
+  setCenter: (point: SearchPoint) => void;
+  setRadius: (radiusMeters: number) => void;
+};
+
+type GoogleMapsApi = {
+  Map: new (
+    element: HTMLElement,
+    options: Record<string, unknown>,
+  ) => GoogleMap;
+  Marker: new (options: Record<string, unknown>) => GoogleMarker;
+  Circle: new (options: Record<string, unknown>) => GoogleCircle;
+};
+
+declare global {
+  interface Window {
+    google?: {
+      maps: GoogleMapsApi;
+    };
+    [key: `initCafeRadarMap_${number}`]: (() => void) | undefined;
+  }
+}
+
+const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const googleMapsLoaders = new Map<string, Promise<GoogleMapsApi>>();
+
+function loadGoogleMaps(apiKey: string | undefined): Promise<GoogleMapsApi> {
   if (!apiKey) {
     return Promise.reject(new Error("Missing VITE_GOOGLE_MAPS_API_KEY"));
   }
@@ -16,12 +61,14 @@ function loadGoogleMaps(apiKey) {
     return Promise.resolve(window.google.maps);
   }
 
-  if (googleMapsLoaders.has(apiKey)) {
-    return googleMapsLoaders.get(apiKey);
+  const existingLoader = googleMapsLoaders.get(apiKey);
+
+  if (existingLoader) {
+    return existingLoader;
   }
 
-  const loader = new Promise((resolve, reject) => {
-    const callbackName = `initCafeRadarMap_${Date.now()}`;
+  const loader = new Promise<GoogleMapsApi>((resolve, reject) => {
+    const callbackName = `initCafeRadarMap_${Date.now()}` as const;
     const script = document.createElement("script");
     const params = new URLSearchParams({
       key: apiKey,
@@ -31,7 +78,7 @@ function loadGoogleMaps(apiKey) {
 
     window[callbackName] = () => {
       delete window[callbackName];
-      resolve(window.google.maps);
+      resolve(window.google!.maps);
     };
 
     script.src = `https://maps.googleapis.com/maps/api/js?${params}`;
@@ -50,10 +97,10 @@ function loadGoogleMaps(apiKey) {
 }
 
 export function CafeMap() {
-  const mapNode = useRef(null);
-  const mapRef = useRef(null);
-  const markerRef = useRef(null);
-  const circleRef = useRef(null);
+  const mapNode = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<GoogleMap | null>(null);
+  const markerRef = useRef<GoogleMarker | null>(null);
+  const circleRef = useRef<GoogleCircle | null>(null);
   const [mapError, setMapError] = useState("");
   const selectedPoint = useSearchStore((state) => state.selectedPoint);
   const radiusMeters = useSearchStore((state) => state.radiusMeters);
@@ -62,20 +109,20 @@ export function CafeMap() {
   useEffect(() => {
     let isMounted = true;
 
-    loadGoogleMaps(GOOGLE_MAPS_API_KEY)
+    loadGoogleMaps(googleMapsApiKey)
       .then((maps) => {
         if (!isMounted || !mapNode.current) {
           return;
         }
 
         const map = new maps.Map(mapNode.current, {
-          center: DEFAULT_CENTER,
+          center: defaultCenter,
           zoom: 15,
           disableDefaultUI: true,
           zoomControl: true,
           clickableIcons: false,
           gestureHandling: "greedy",
-          mapId: "CAFEE_RADAR_SEARCH_MAP",
+          mapId: "CAFE_RADAR_SEARCH_MAP",
         });
 
         map.addListener("click", (event) => {
@@ -87,7 +134,7 @@ export function CafeMap() {
 
         mapRef.current = map;
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         if (isMounted) {
           setMapError(error.message);
         }
@@ -118,10 +165,10 @@ export function CafeMap() {
     if (!circleRef.current) {
       circleRef.current = new maps.Circle({
         map,
-        strokeColor: "#8b5e34",
+        strokeColor: "#2f6f4e",
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: "#8b5e34",
+        fillColor: "#2f6f4e",
         fillOpacity: 0.15,
       });
     }
@@ -138,24 +185,24 @@ export function CafeMap() {
   return <div ref={mapNode} className="h-full w-full" aria-label="Cafe map" />;
 }
 
-function MapFallback({ error }) {
+function MapFallback({ error }: { error: string }) {
   const selectedPoint = useSearchStore((state) => state.selectedPoint);
   const setSelectedPoint = useSearchStore((state) => state.setSelectedPoint);
 
   return (
     <button
       className="relative h-full w-full cursor-crosshair overflow-hidden bg-[linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:48px_48px] text-left"
-      onClick={() => setSelectedPoint(DEFAULT_CENTER)}
+      onClick={() => setSelectedPoint(defaultCenter)}
       type="button"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-stone-800 via-coffee-900 to-stone-950" />
-      <div className="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-coffee-500 shadow-lg" />
+      <div className="absolute inset-0 bg-gradient-to-br from-cafe-ink via-cafe-leaf to-stone-950" />
+      <div className="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-cafe-leaf shadow-lg" />
       {selectedPoint ? (
         <div className="absolute bottom-24 left-1/2 h-5 w-5 -translate-x-1/2 rounded-full border-2 border-white bg-emerald-500 shadow-lg" />
       ) : null}
-      <div className="absolute bottom-4 left-4 max-w-sm rounded-lg bg-white/95 p-3 text-sm shadow">
-        <p className="font-semibold text-stone-900">Map preview mode</p>
-        <p className="mt-1 text-stone-700">
+      <div className="absolute bottom-4 left-4 max-w-sm rounded-lg bg-white/95 p-3 text-sm shadow-panel">
+        <p className="font-semibold text-cafe-ink">Map preview mode</p>
+        <p className="mt-1 text-slate-700">
           {error}. Set VITE_GOOGLE_MAPS_API_KEY to load Google Maps. Click here
           to select the default Seongsu point.
         </p>

@@ -1,16 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        coffee: {
-          50: "#f8f5ef",
-          100: "#eee5d4",
-          500: "#8b5e34",
-          700: "#56351f",
-          900: "#26180f",
+        cafe: {
+          ink: "#1f2933",
+          leaf: "#2f6f4e",
+          moss: "#dce8cf",
+          cream: "#f7f3ea",
         },
+      },
+      boxShadow: {
+        panel: "0 16px 40px rgb(31 41 51 / 0.12)",
       },
     },
   },

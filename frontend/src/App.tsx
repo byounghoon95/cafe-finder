@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { CafeMap } from "./components/CafeMap.jsx";
-import { SearchControls } from "./components/SearchControls.jsx";
-import { SearchStatus } from "./components/SearchStatus.jsx";
-import { fetchNearbyCafes } from "./api/cafes.js";
-import { useSearchStore } from "./store/searchStore.js";
+import { fetchNearbyCafes } from "./api/cafes";
+import { CafeMap } from "./components/CafeMap";
+import { SearchControls } from "./components/SearchControls";
+import { SearchStatus } from "./components/SearchStatus";
+import { useSearchStore } from "./store/searchStore";
 
-export default function App() {
+function App() {
   const selectedPoint = useSearchStore((state) => state.selectedPoint);
   const radiusMeters = useSearchStore((state) => state.radiusMeters);
 
@@ -16,15 +16,15 @@ export default function App() {
   });
 
   return (
-    <main className="h-screen overflow-hidden bg-stone-950 text-stone-950">
+    <main className="h-screen overflow-hidden bg-cafe-ink text-cafe-ink">
       <CafeMap />
       <section className="pointer-events-none absolute inset-x-0 top-0 z-10 p-3 sm:p-4">
-        <div className="pointer-events-auto mx-auto flex max-w-5xl flex-col gap-3 rounded-lg border border-white/70 bg-white/95 p-3 shadow-lg backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+        <div className="pointer-events-auto mx-auto flex max-w-5xl flex-col gap-3 rounded-lg border border-white/70 bg-white/95 p-3 shadow-panel backdrop-blur sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-coffee-700">
+            <p className="text-xs font-semibold uppercase tracking-wide text-cafe-leaf">
               CafeRadar
             </p>
-            <h1 className="text-lg font-semibold text-stone-950">
+            <h1 className="text-lg font-semibold text-cafe-ink">
               Pick a point to search nearby cafes
             </h1>
           </div>
@@ -35,3 +35,5 @@ export default function App() {
     </main>
   );
 }
+
+export default App;

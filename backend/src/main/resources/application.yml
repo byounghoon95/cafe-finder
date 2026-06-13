@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: cafe-radar-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/cafe_radar}
+    username: ${SPRING_DATASOURCE_USERNAME:cafe_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:cafe_password}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+server:
+  port: ${SERVER_PORT:8080}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

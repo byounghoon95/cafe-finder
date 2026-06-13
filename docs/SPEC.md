@@ -19,7 +19,19 @@ This project demonstrates:
 - Seeded demo data for reproducible portfolio demos
 - Clear task-based engineering workflow
 
-## 3. Core Scenario
+## 3. MVP Decisions
+
+The first version should stay intentionally small and demoable.
+
+- No login or admin dashboard in the MVP.
+- No CSV upload in the MVP.
+- No external Places API in the MVP.
+- Cafe data comes from local synthetic seed data.
+- User search starts from map click; browser geolocation is a nice-to-have after map click works.
+- The main screen is the product, not a landing page.
+- The app should work after `docker compose up -d --build` once backend and frontend services exist.
+
+## 4. Core Scenario
 
 1. User opens the map.
 2. User clicks a point or uses browser geolocation.
@@ -29,7 +41,7 @@ This project demonstrates:
 6. User filters by wifi, power outlets, quiet, open now, price level, and tags.
 7. User selects a cafe and sees recommendation reasons.
 
-## 4. Tech Stack
+## 5. Tech Stack
 
 ### Frontend
 
@@ -59,16 +71,16 @@ This project demonstrates:
 - Docker
 - Docker Compose
 
-## 5. Functional Requirements
+## 6. Functional Requirements
 
-### 5.1 Map Search
+### 6.1 Map Search
 
 - User can click a map point.
 - User can use current browser location when permission is granted.
 - User can choose radius: 300m, 500m, 1000m.
 - App queries cafes near the selected point.
 
-### 5.2 Cafe Results
+### 6.2 Cafe Results
 
 Each cafe includes:
 
@@ -86,7 +98,7 @@ Each cafe includes:
 - seat count
 - tags
 
-### 5.3 Filtering and Sorting
+### 6.3 Filtering and Sorting
 
 User can filter by:
 
@@ -105,7 +117,7 @@ User can sort by:
 - review count
 - quietness
 
-### 5.4 Recommendation Score
+### 6.4 Recommendation Score
 
 The ranking model is rule-based and explainable.
 
@@ -123,7 +135,17 @@ Score range:
 - each sub-score: 0 to 100
 - recommendation score: 0 to 100
 
-### 5.5 Cafe Detail Panel
+Sub-score rules for MVP:
+
+- `ratingScore`: `rating / 5 * 100`.
+- `distanceScore`: 100 at 0m, linearly decreases to 0 at the selected radius.
+- `workFriendlyScore`: 40 points for wifi, 40 points for power outlets, up to 20 points from seat count capped at 80 seats.
+- `quietScore`: stored cafe quietness score, 0 to 100.
+- `popularityScore`: review count normalized with 100 points at 500 or more reviews.
+
+The response should include the final score, sub-scores, and 2-4 short explanation strings.
+
+### 6.5 Cafe Detail Panel
 
 Selected cafe shows:
 
@@ -135,12 +157,15 @@ Selected cafe shows:
 - recommendation score
 - scoring explanation
 
-### 5.6 Demo Data
+### 6.6 Demo Data
 
 - Local demo data is seeded automatically.
 - Seed data covers several Seoul cafe districts.
 - No user CSV upload is required for the core demo.
 - Data is synthetic and safe to commit.
+- Target seed size: at least 200 cafes.
+- Target coverage: at least 10 Seoul cafe districts.
+- Each district should have enough cafes to make 300m, 500m, and 1000m radius searches feel different.
 
 Suggested districts:
 
@@ -155,7 +180,7 @@ Suggested districts:
 - Itaewon
 - Yeouido
 
-## 6. Non-Functional Requirements
+## 7. Non-Functional Requirements
 
 - Local environment must run with one Docker Compose command.
 - App should be usable immediately after startup.
@@ -163,38 +188,53 @@ Suggested districts:
 - Sensitive values such as Google Maps API key must use environment variables.
 - Seed data must not be private, licensed, scraped, or presented as real business data.
 
-## 7. Data Model
+## 8. Data Model
 
 ### cafes
 
 | Column | Type | Note |
 | --- | --- | --- |
 | id | bigint | primary key |
-| name | varchar |  |
-| district | varchar | Seoul district or neighborhood label |
-| address | varchar | synthetic display address |
-| latitude | decimal |  |
-| longitude | decimal |  |
+| name | varchar | required, max 120 |
+| district | varchar | required, Seoul district or neighborhood label |
+| address | varchar | required synthetic display address |
+| latitude | decimal | required, -90 to 90 |
+| longitude | decimal | required, -180 to 180 |
 | geom | geography | PostGIS point |
-| rating | decimal | 0.0 to 5.0 |
-| review_count | integer |  |
-| price_level | integer | 1 to 4 |
-| opens_at | time | local opening time |
-| closes_at | time | local closing time |
-| has_wifi | boolean |  |
-| has_power | boolean |  |
-| quiet_score | integer | 0 to 100 |
-| seat_count | integer |  |
-| tags | text[] or normalized table | MVP may start simple |
+| rating | decimal | required, 0.0 to 5.0 |
+| review_count | integer | required, 0 or higher |
+| price_level | integer | required, 1 to 4 |
+| opens_at | time | required local opening time |
+| closes_at | time | required local closing time |
+| has_wifi | boolean | required |
+| has_power | boolean | required |
+| quiet_score | integer | required, 0 to 100 |
+| seat_count | integer | required, 0 or higher |
+| tags | text[] | MVP uses Postgres text array |
 | created_at | timestamp |  |
 | updated_at | timestamp |  |
 
-## 8. API Spec
+## 9. API Spec
 
 ```text
 GET /api/health
 GET /api/cafes/nearby?lat=37.5&lng=127.0&radius=500
 GET /api/cafes/{cafeId}
+```
+
+Nearby query parameters:
+
+```text
+lat: required decimal, -90 to 90
+lng: required decimal, -180 to 180
+radius: required integer, one of 300, 500, 1000
+openNow: optional boolean
+hasWifi: optional boolean
+hasPower: optional boolean
+quiet: optional boolean, maps to quiet_score >= 70
+priceLevel: optional comma-separated integers from 1 to 4
+tags: optional comma-separated tag values
+sort: optional, one of recommendation,distance,rating,reviews,quiet
 ```
 
 Nearby query filters:
@@ -209,7 +249,57 @@ tags=work-friendly,dessert
 sort=recommendation,distance,rating,reviews,quiet
 ```
 
-## 9. Frontend Pages
+Nearby response shape:
+
+```json
+{
+  "query": {
+    "latitude": 37.5446,
+    "longitude": 127.0559,
+    "radiusMeters": 500,
+    "sort": "recommendation"
+  },
+  "cafes": [
+    {
+      "id": 1,
+      "name": "Seongsu Coffee Lab",
+      "district": "Seongsu",
+      "address": "12 Seongsui-ro, Seongdong-gu, Seoul",
+      "latitude": 37.5449,
+      "longitude": 127.0563,
+      "distanceMeters": 72,
+      "rating": 4.6,
+      "reviewCount": 328,
+      "priceLevel": 2,
+      "opensAt": "08:00",
+      "closesAt": "22:00",
+      "openNow": true,
+      "hasWifi": true,
+      "hasPower": true,
+      "quietScore": 82,
+      "seatCount": 48,
+      "tags": ["work-friendly", "dessert"],
+      "recommendationScore": 91,
+      "scoreBreakdown": {
+        "ratingScore": 92,
+        "distanceScore": 86,
+        "workFriendlyScore": 92,
+        "quietScore": 82,
+        "popularityScore": 66
+      },
+      "reasons": [
+        "Very close to the selected point.",
+        "Wifi and power outlets make it good for working.",
+        "Quietness score is high for this dataset."
+      ]
+    }
+  ]
+}
+```
+
+Cafe detail response may reuse the same cafe object shape used by nearby search.
+
+## 10. Frontend Pages
 
 ### /
 
@@ -225,7 +315,7 @@ sort=recommendation,distance,rating,reviews,quiet
 - architecture summary
 - scoring formula
 
-## 10. MVP Scope
+## 11. MVP Scope
 
 MVP must include:
 
@@ -247,3 +337,5 @@ Out of MVP:
 - owner/admin dashboards
 - scraping real cafe data
 - machine learning recommendations
+
+

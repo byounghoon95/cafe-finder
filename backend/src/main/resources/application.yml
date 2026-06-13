@@ -12,6 +12,9 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
 
 server:
   port: ${SERVER_PORT:8080}

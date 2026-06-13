@@ -38,7 +38,7 @@ When a task is finished, update the task file with:
 | --- | --- | --- | --- |
 | foundation TASK-01 | ✅ done | none | [01-repository-structure.md](foundation/01-repository-structure.md) |
 | infra TASK-01 | ✅ done | foundation TASK-01 | [01-docker-compose-base.md](infra/01-docker-compose-base.md) |
-| backend TASK-01 | ⬜ todo | foundation TASK-01, infra TASK-01 | [01-spring-boot-foundation.md](backend/01-spring-boot-foundation.md) |
+| backend TASK-01 | ✅ done | foundation TASK-01, infra TASK-01 | [01-spring-boot-foundation.md](backend/01-spring-boot-foundation.md) |
 | backend TASK-02 | ⬜ todo | backend TASK-01 | [02-cafe-domain-postgis.md](backend/02-cafe-domain-postgis.md) |
 | backend TASK-03 | ⬜ todo | backend TASK-02 | [03-nearby-cafe-search.md](backend/03-nearby-cafe-search.md) |
 | backend TASK-04 | ⬜ todo | backend TASK-03 | [04-recommendation-scoring.md](backend/04-recommendation-scoring.md) |

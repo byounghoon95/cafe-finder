@@ -22,5 +22,21 @@
       timeout: 5s
       retries: 5
 
+  backend:
+    build:
+      context: ./backend
+    container_name: cafe-radar-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/${POSTGRES_DB:-cafe_radar}"
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-cafe_user}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-cafe_password}
+      SERVER_PORT: 8080
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+
 volumes:
   postgres-data:

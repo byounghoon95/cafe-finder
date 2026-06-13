@@ -26,13 +26,13 @@ CafeRadar is a GIS-based cafe discovery web app. Users click a point on the map,
 
 - [Task index](docs/tasks/README.md)
 - [Project spec](docs/SPEC.md)
-## Local Database
+## Local Runtime
 
-Copy the environment template and start PostgreSQL/PostGIS:
+Copy the environment template and start PostgreSQL/PostGIS plus the backend API:
 
 ```powershell
 Copy-Item .env.example .env
-docker compose up -d
+docker compose up -d --build
 ```
 
 The local database runs on `localhost:5432` with these defaults:
@@ -44,5 +44,21 @@ POSTGRES_PASSWORD=cafe_password
 ```
 
 PostGIS is enabled by `infra/postgres/init/01-postgis.sql` on first database initialization.
-Backend and frontend Compose services will be added when those app foundations are implemented.
+The backend API runs on `http://localhost:8080` by default.
+
+Useful backend URLs:
+
+```text
+GET http://localhost:8080/api/health
+Swagger UI: http://localhost:8080/swagger-ui.html
+OpenAPI JSON: http://localhost:8080/v3/api-docs
+```
+
+Run focused backend tests from the backend directory when Java and the Gradle wrapper are available:
+
+```powershell
+./gradlew test
+```
+
+The frontend Compose service will be added when the frontend foundation is implemented.
 

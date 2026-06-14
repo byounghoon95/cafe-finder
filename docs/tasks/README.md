@@ -41,7 +41,7 @@ When a task is finished, update the task file with:
 | backend TASK-01 | ✅ done | foundation TASK-01, infra TASK-01 | [01-spring-boot-foundation.md](backend/01-spring-boot-foundation.md) |
 | backend TASK-02 | ✅ done | backend TASK-01 | [02-cafe-domain-postgis.md](backend/02-cafe-domain-postgis.md) |
 | backend TASK-03 | ✅ done | backend TASK-02 | [03-nearby-cafe-search.md](backend/03-nearby-cafe-search.md) |
-| backend TASK-04 | ⬜ todo | backend TASK-03 | [04-recommendation-scoring.md](backend/04-recommendation-scoring.md) |
+| backend TASK-04 | ✅ done | backend TASK-03 | [04-recommendation-scoring.md](backend/04-recommendation-scoring.md) |
 | backend TASK-05 | ⬜ todo | backend TASK-04 | [05-backend-tests.md](backend/05-backend-tests.md) |
 | frontend TASK-01 | ✅ done | foundation TASK-01 | [01-react-vite-foundation.md](frontend/01-react-vite-foundation.md) |
 | frontend TASK-02 | ✅ done | frontend TASK-01, backend TASK-03 | [02-map-search-ui.md](frontend/02-map-search-ui.md) |

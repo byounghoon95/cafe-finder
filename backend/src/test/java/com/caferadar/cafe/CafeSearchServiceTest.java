@@ -18,6 +18,7 @@ class CafeSearchServiceTest {
     private final CafeRepository cafeRepository = Mockito.mock(CafeRepository.class);
     private final CafeSearchService service = new CafeSearchService(
             cafeRepository,
+            new CafeRecommendationScoringService(),
             Clock.fixed(Instant.parse("2026-06-13T03:00:00Z"), ZoneId.of("Asia/Seoul"))
     );
 
@@ -71,6 +72,37 @@ class CafeSearchServiceTest {
 
         assertThat(response.cafes()).extracting(NearbyCafeResultResponse::name)
                 .containsExactly("Higher Rated", "Lower Rated");
+    }
+
+    @Test
+    void searchSortsByRecommendationScore() {
+        when(cafeRepository.findWithinRadius(37.5, 127.0, 500))
+                .thenReturn(List.of(
+                        view(1L, "Closer Lower Score", 40.0, 3.8, 20, 2, false, false, 40, "dessert"),
+                        view(2L, "Farther Better Score", 180.0, 4.8, 500, 2, true, true, 90, "work-friendly"),
+                        view(3L, "Highest Score", 80.0, 4.8, 500, 2, true, true, 90, "work-friendly")
+                ));
+
+        NearbyCafeResponse response = service.search(new NearbyCafeSearchRequest(
+                37.5,
+                127.0,
+                500,
+                null,
+                null,
+                null,
+                null,
+                List.of(),
+                List.of(),
+                CafeSearchSort.RECOMMENDATION
+        ));
+
+        assertThat(response.cafes()).extracting(NearbyCafeResultResponse::name)
+                .containsExactly("Highest Score",
+                        "Farther Better Score",
+                        "Closer Lower Score");
+        assertThat(response.cafes().get(0).recommendationScore()).isBetween(0, 100);
+        assertThat(response.cafes().get(0).scoreBreakdown().ratingScore()).isEqualTo(96);
+        assertThat(response.cafes().get(0).reasons()).isNotEmpty();
     }
 
     private CafeDistanceView view(

@@ -15,14 +15,16 @@ import org.springframework.stereotype.Service;
 public class CafeSearchService {
 
     private final CafeRepository cafeRepository;
+    private final CafeRecommendationScoringService scoringService;
     private final Clock clock;
 
-    public CafeSearchService(CafeRepository cafeRepository) {
-        this(cafeRepository, Clock.systemDefaultZone());
+    public CafeSearchService(CafeRepository cafeRepository, CafeRecommendationScoringService scoringService) {
+        this(cafeRepository, scoringService, Clock.systemDefaultZone());
     }
 
-    CafeSearchService(CafeRepository cafeRepository, Clock clock) {
+    CafeSearchService(CafeRepository cafeRepository, CafeRecommendationScoringService scoringService, Clock clock) {
         this.cafeRepository = cafeRepository;
+        this.scoringService = scoringService;
         this.clock = clock;
     }
 
@@ -30,7 +32,7 @@ public class CafeSearchService {
         List<NearbyCafeResultResponse> cafes = cafeRepository
                 .findWithinRadius(request.latitude(), request.longitude(), request.radiusMeters())
                 .stream()
-                .map(this::toResponse)
+                .map(cafe -> toResponse(cafe, request.radiusMeters()))
                 .filter(cafe -> matchesFilters(cafe, request))
                 .sorted(comparatorFor(request.sort()))
                 .toList();
@@ -46,8 +48,8 @@ public class CafeSearchService {
         );
     }
 
-    private NearbyCafeResultResponse toResponse(CafeDistanceView cafe) {
-        return new NearbyCafeResultResponse(
+    private NearbyCafeResultResponse toResponse(CafeDistanceView cafe, int radiusMeters) {
+        NearbyCafeResultResponse response = new NearbyCafeResultResponse(
                 cafe.getId(),
                 cafe.getName(),
                 cafe.getDistrict(),
@@ -65,7 +67,34 @@ public class CafeSearchService {
                 Boolean.TRUE.equals(cafe.getHasPower()),
                 cafe.getQuietScore(),
                 cafe.getSeatCount(),
-                tagsAsList(cafe.getTags())
+                tagsAsList(cafe.getTags()),
+                0,
+                new CafeScoreBreakdown(0, 0, 0, 0, 0),
+                List.of()
+        );
+        CafeRecommendationScore score = scoringService.score(response, radiusMeters);
+        return new NearbyCafeResultResponse(
+                response.id(),
+                response.name(),
+                response.district(),
+                response.address(),
+                response.latitude(),
+                response.longitude(),
+                response.distanceMeters(),
+                response.rating(),
+                response.reviewCount(),
+                response.priceLevel(),
+                response.opensAt(),
+                response.closesAt(),
+                response.openNow(),
+                response.hasWifi(),
+                response.hasPower(),
+                response.quietScore(),
+                response.seatCount(),
+                response.tags(),
+                score.recommendationScore(),
+                score.scoreBreakdown(),
+                score.reasons()
         );
     }
 
@@ -96,7 +125,11 @@ public class CafeSearchService {
 
     private Comparator<NearbyCafeResultResponse> comparatorFor(CafeSearchSort sort) {
         return switch (sort) {
-            case DISTANCE, RECOMMENDATION -> Comparator.comparingInt(NearbyCafeResultResponse::distanceMeters)
+            case RECOMMENDATION -> Comparator.comparingInt(NearbyCafeResultResponse::recommendationScore).reversed()
+                    .thenComparingInt(NearbyCafeResultResponse::distanceMeters)
+                    .thenComparing(Comparator.comparing(NearbyCafeResultResponse::rating).reversed())
+                    .thenComparing(NearbyCafeResultResponse::id);
+            case DISTANCE -> Comparator.comparingInt(NearbyCafeResultResponse::distanceMeters)
                     .thenComparing(Comparator.comparing(NearbyCafeResultResponse::rating).reversed());
             case RATING -> Comparator.comparing(NearbyCafeResultResponse::rating).reversed()
                     .thenComparingInt(NearbyCafeResultResponse::distanceMeters);

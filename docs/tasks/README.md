@@ -48,7 +48,7 @@ When a task is finished, update the task file with:
 | frontend TASK-03 | ✅ done | frontend TASK-02, backend TASK-03 | [03-cafe-results-panel.md](frontend/03-cafe-results-panel.md) |
 | frontend TASK-04 | ✅ done | frontend TASK-03, backend TASK-04 | [04-filters-and-scoring-ui.md](frontend/04-filters-and-scoring-ui.md) |
 | frontend TASK-05 | ⬜ todo | frontend TASK-04 | [05-frontend-smoke-tests.md](frontend/05-frontend-smoke-tests.md) |
-| infra TASK-02 | ⬜ todo | backend TASK-02 | [02-demo-data-seed.md](infra/02-demo-data-seed.md) |
+| infra TASK-02 | ✅ done | backend TASK-02 | [02-demo-data-seed.md](infra/02-demo-data-seed.md) |
 | portfolio TASK-01 | ⬜ todo | backend TASK-05, frontend TASK-05, infra TASK-02 | [01-final-readme-portfolio-docs.md](portfolio/01-final-readme-portfolio-docs.md) |
 
 ## Suggested Flow

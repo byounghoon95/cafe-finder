@@ -28,7 +28,7 @@ CafeRadar is a GIS-based cafe discovery web app. Users click a point on the map,
 - [Project spec](docs/SPEC.md)
 ## Local Runtime
 
-Copy the environment template and start PostgreSQL/PostGIS plus the backend API:
+Copy the environment template and start PostgreSQL/PostGIS, the backend API, and the frontend web app:
 
 ```powershell
 Copy-Item .env.example .env
@@ -46,6 +46,7 @@ POSTGRES_PASSWORD=cafe_password
 PostGIS is enabled by `infra/postgres/init/01-postgis.sql` on first database initialization.
 Flyway applies the cafe schema and synthetic demo seed data when the backend starts. The seed creates 200 cafes across Gangnam, Seongsu, Hongdae, Yeonnam, Hapjeong, Euljiro, Jamsil, Sinchon, Itaewon, and Yeouido, and skips records whose generated names already exist so restarts do not duplicate local demo data.
 The backend API runs on `http://localhost:8080` by default.
+The frontend runs on `http://localhost:5173` by default and proxies `/api` requests to the backend container.
 
 Useful backend URLs:
 
@@ -61,9 +62,7 @@ Run focused backend tests from the backend directory when Java and the Gradle wr
 ./gradlew test
 ```
 
-The frontend Compose service will be added when the frontend foundation is implemented.
-
-## Local Frontend
+## Local Frontend Development
 
 Install and start the React/Vite app:
 
@@ -73,5 +72,5 @@ npm install
 npm run dev
 ```
 
-The app runs on `http://localhost:5173` by default. Use `frontend/.env.local` for local frontend-only values such as `VITE_API_BASE_URL` or `VITE_GOOGLE_MAPS_API_KEY`.
+The Vite dev app runs on `http://localhost:5173` by default. Use `frontend/.env.local` for local frontend-only values such as `VITE_API_BASE_URL` or `VITE_GOOGLE_MAPS_API_KEY`.
 

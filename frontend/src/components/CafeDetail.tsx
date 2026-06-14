@@ -8,8 +8,8 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
   if (!cafe) {
     return (
       <section className="detail-panel">
-        <h2>Select a cafe</h2>
-        <p>Pick a marker or list item to view address, amenities, and tags.</p>
+        <h2>카페를 선택하세요</h2>
+        <p>마커나 목록을 선택하면 주소, 편의시설, 태그를 볼 수 있습니다.</p>
       </section>
     );
   }
@@ -22,7 +22,7 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
           <h2>{cafe.name}</h2>
         </div>
         <span className={cafe.openNow ? "status-pill open" : "status-pill"}>
-          {cafe.openNow ? "Open" : "Closed"}
+          {cafe.openNow ? "영업 중" : "영업 종료"}
         </span>
       </div>
 
@@ -30,28 +30,28 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
 
       <dl className="detail-grid">
         <div>
-          <dt>Distance</dt>
+          <dt>거리</dt>
           <dd>{cafe.distanceMeters}m</dd>
         </div>
         <div>
-          <dt>Rating</dt>
-          <dd>{cafe.rating.toFixed(1)} ({cafe.reviewCount})</dd>
+          <dt>평점</dt>
+          <dd>{cafe.rating.toFixed(1)} (리뷰 {cafe.reviewCount}개)</dd>
         </div>
         <div>
-          <dt>Hours</dt>
+          <dt>영업시간</dt>
           <dd>{cafe.opensAt} - {cafe.closesAt}</dd>
         </div>
         <div>
-          <dt>Seats</dt>
-          <dd>{cafe.seatCount}</dd>
+          <dt>좌석</dt>
+          <dd>{cafe.seatCount}석</dd>
         </div>
       </dl>
 
       <div className="amenity-row">
-        <span className={cafe.hasWifi ? "on" : ""}>Wifi</span>
-        <span className={cafe.hasPower ? "on" : ""}>Power</span>
-        <span>Quiet {cafe.quietScore}</span>
-        <span>{"$".repeat(cafe.priceLevel)}</span>
+        <span className={cafe.hasWifi ? "on" : ""}>와이파이</span>
+        <span className={cafe.hasPower ? "on" : ""}>콘센트</span>
+        <span>조용함 {cafe.quietScore}</span>
+        <span>{"₩".repeat(cafe.priceLevel)}</span>
       </div>
 
       <div className="tag-row detail-tags">
@@ -60,34 +60,34 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
         ))}
       </div>
 
-      <section className="score-panel" aria-label="Recommendation score">
+      <section className="score-panel" aria-label="추천 점수">
         <div className="score-summary">
           <div>
-            <p className="eyebrow">Recommendation</p>
+            <p className="eyebrow">추천 점수</p>
             <h3>{Math.round(cafe.recommendationScore)} / 100</h3>
           </div>
-          <p>Ranked from rating, distance, work amenities, quietness, and review volume.</p>
+          <p>평점, 거리, 작업 편의시설, 조용함, 리뷰 수를 기준으로 계산했습니다.</p>
         </div>
 
         <dl className="score-grid">
           <div>
-            <dt>Rating</dt>
+            <dt>평점</dt>
             <dd>{Math.round(cafe.scoreBreakdown.ratingScore)}</dd>
           </div>
           <div>
-            <dt>Distance</dt>
+            <dt>거리</dt>
             <dd>{Math.round(cafe.scoreBreakdown.distanceScore)}</dd>
           </div>
           <div>
-            <dt>Work</dt>
+            <dt>작업</dt>
             <dd>{Math.round(cafe.scoreBreakdown.workFriendlyScore)}</dd>
           </div>
           <div>
-            <dt>Quiet</dt>
+            <dt>조용함</dt>
             <dd>{Math.round(cafe.scoreBreakdown.quietScore)}</dd>
           </div>
           <div>
-            <dt>Popularity</dt>
+            <dt>인기도</dt>
             <dd>{Math.round(cafe.scoreBreakdown.popularityScore)}</dd>
           </div>
         </dl>

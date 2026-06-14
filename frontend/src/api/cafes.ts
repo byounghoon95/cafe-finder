@@ -74,7 +74,7 @@ export async function fetchNearbyCafes({
     });
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      throw new Error("Nearby cafe search timed out.");
+      throw new Error("주변 카페 검색 시간이 초과되었습니다.");
     }
     throw error;
   } finally {

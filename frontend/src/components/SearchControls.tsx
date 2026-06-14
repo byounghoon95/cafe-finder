@@ -8,11 +8,11 @@ import {
 } from "../store/searchStore";
 
 const sortOptions: { value: CafeSort; label: string }[] = [
-  { value: "distance", label: "Distance" },
-  { value: "rating", label: "Rating" },
-  { value: "reviews", label: "Reviews" },
-  { value: "quiet", label: "Quiet" },
-  { value: "recommendation", label: "Recommended" },
+  { value: "distance", label: "거리순" },
+  { value: "rating", label: "평점순" },
+  { value: "reviews", label: "리뷰순" },
+  { value: "quiet", label: "조용한순" },
+  { value: "recommendation", label: "추천순" },
 ];
 
 export function SearchControls() {
@@ -56,7 +56,7 @@ export function SearchControls() {
           onClick={useCurrentLocation}
           type="button"
         >
-          Current location
+          현재 위치
         </button>
         <div className="flex rounded-md border border-stone-300 bg-stone-100 p-1">
           {radiusOptions.map((radius: RadiusMeters) => (
@@ -75,7 +75,7 @@ export function SearchControls() {
           ))}
         </div>
         <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-          Sort
+          정렬
           <select
             className="rounded-md border border-stone-300 bg-white px-2 py-2 text-sm text-cafe-ink"
             value={sort}
@@ -92,10 +92,10 @@ export function SearchControls() {
 
       <div className="flex flex-wrap items-center gap-2 text-sm">
         {[
-          ["openNow", "Open now"],
-          ["hasWifi", "Wifi"],
-          ["hasPower", "Power"],
-          ["quiet", "Quiet"],
+          ["openNow", "영업 중"],
+          ["hasWifi", "와이파이"],
+          ["hasPower", "콘센트"],
+          ["quiet", "조용함"],
         ].map(([filter, label]) => (
           <button
             className={`filter-chip ${
@@ -116,7 +116,7 @@ export function SearchControls() {
           </button>
         ))}
         <span className="ml-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-          Price
+          가격대
         </span>
         {priceLevelOptions.map((priceLevel) => (
           <button
@@ -129,7 +129,7 @@ export function SearchControls() {
             onClick={() => togglePriceLevel(priceLevel)}
             type="button"
           >
-            {"$".repeat(priceLevel)}
+            {"₩".repeat(priceLevel)}
           </button>
         ))}
         {tagOptions.map((tag) => (
@@ -152,7 +152,7 @@ export function SearchControls() {
             onClick={clearFilters}
             type="button"
           >
-            Clear {activeFilterCount}
+            필터 초기화 {activeFilterCount}
           </button>
         ) : null}
       </div>

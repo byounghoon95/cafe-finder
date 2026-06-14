@@ -22,19 +22,19 @@ export function CafeList({
   if (!selectedPoint) {
     return (
       <div className="state-block">
-        Click the map or use your current location to search.
+        지도를 누르거나 현재 위치로 주변 카페를 검색하세요.
       </div>
     );
   }
 
   if (isLoading) {
-    return <div className="state-block">Loading nearby cafes...</div>;
+    return <div className="state-block">주변 카페를 불러오는 중입니다...</div>;
   }
 
   if (isError) {
     return (
       <div className="state-block error">
-        {error?.message ?? "Could not load cafes."}
+        {error?.message ?? "카페를 불러오지 못했습니다."}
       </div>
     );
   }
@@ -42,7 +42,7 @@ export function CafeList({
   if (cafes.length === 0) {
     return (
       <div className="state-block">
-        No cafes found for this point and radius.
+        선택한 위치와 반경 안에서 카페를 찾지 못했습니다.
       </div>
     );
   }
@@ -60,7 +60,7 @@ export function CafeList({
               <span className="cafe-card-main">
                 <strong>{cafe.name}</strong>
                 <span>
-                  {cafe.district} - {cafe.distanceMeters}m away
+                  {cafe.district} - {cafe.distanceMeters}m
                 </span>
               </span>
               <span className="score-badge">
@@ -69,14 +69,14 @@ export function CafeList({
             </span>
             <span className="cafe-meta">
               <span>{cafe.rating.toFixed(1)}</span>
-              <span>{cafe.reviewCount} reviews</span>
-              <span>{"$".repeat(cafe.priceLevel)}</span>
+              <span>리뷰 {cafe.reviewCount}개</span>
+              <span>{"₩".repeat(cafe.priceLevel)}</span>
             </span>
             <span className="tag-row">
-              {cafe.openNow && <span>Open now</span>}
-              {cafe.hasWifi && <span>Wifi</span>}
-              {cafe.hasPower && <span>Power</span>}
-              <span>Quiet {cafe.quietScore}</span>
+              {cafe.openNow && <span>영업 중</span>}
+              {cafe.hasWifi && <span>와이파이</span>}
+              {cafe.hasPower && <span>콘센트</span>}
+              <span>조용함 {cafe.quietScore}</span>
             </span>
             {cafe.reasons.length > 0 ? (
               <span className="cafe-reason">{cafe.reasons[0]}</span>

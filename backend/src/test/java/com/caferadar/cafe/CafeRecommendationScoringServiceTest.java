@@ -27,9 +27,9 @@ class CafeRecommendationScoringServiceTest {
         assertThat(score.recommendationScore()).isEqualTo(85);
         assertThat(score.scoreBreakdown()).isEqualTo(new CafeScoreBreakdown(90, 90, 90, 80, 50));
         assertThat(score.reasons()).containsExactly(
-                "Very close to the selected point.",
-                "Wifi and power outlets make it good for working.",
-                "Quietness score is high for this dataset."
+                "선택한 위치에서 매우 가깝습니다.",
+                "와이파이와 콘센트가 있어 작업하기 좋습니다.",
+                "이 데모 데이터 기준 조용함 점수가 높습니다."
         );
     }
 
@@ -63,7 +63,7 @@ class CafeRecommendationScoringServiceTest {
         ), 500);
 
         assertThat(score.recommendationScore()).isBetween(0, 100);
-        assertThat(score.reasons()).containsExactly("Balanced option based on distance, rating, and amenities.");
+        assertThat(score.reasons()).containsExactly("거리, 평점, 편의시설이 균형 잡힌 선택지입니다.");
     }
 
     private NearbyCafeResultResponse cafe(

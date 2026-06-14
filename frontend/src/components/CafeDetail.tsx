@@ -50,7 +50,7 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
       <div className="amenity-row">
         <span className={cafe.hasWifi ? "on" : ""}>와이파이</span>
         <span className={cafe.hasPower ? "on" : ""}>콘센트</span>
-        <span>조용함 {cafe.quietScore}</span>
+        <span>조용함 점수 {cafe.quietScore}</span>
         <span>{"₩".repeat(cafe.priceLevel)}</span>
       </div>
 

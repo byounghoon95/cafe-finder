@@ -1,6 +1,11 @@
 import { getJson } from "./client";
 import type { Cafe } from "../types";
-import type { CafeSort, RadiusMeters, SearchPoint } from "../store/searchStore";
+import type {
+  CafeSort,
+  RadiusMeters,
+  SearchFilters,
+  SearchPoint,
+} from "../store/searchStore";
 
 export type NearbyCafesResponse = {
   query: {
@@ -16,12 +21,14 @@ type FetchNearbyCafesParams = {
   selectedPoint: SearchPoint | null;
   radiusMeters: RadiusMeters;
   sort: CafeSort;
+  filters: SearchFilters;
 };
 
 export async function fetchNearbyCafes({
   selectedPoint,
   radiusMeters,
   sort,
+  filters,
 }: FetchNearbyCafesParams): Promise<NearbyCafesResponse | null> {
   if (!selectedPoint) {
     return null;
@@ -33,6 +40,30 @@ export async function fetchNearbyCafes({
     radius: String(radiusMeters),
     sort,
   });
+
+  if (filters.openNow) {
+    params.set("openNow", "true");
+  }
+
+  if (filters.hasWifi) {
+    params.set("hasWifi", "true");
+  }
+
+  if (filters.hasPower) {
+    params.set("hasPower", "true");
+  }
+
+  if (filters.quiet) {
+    params.set("quiet", "true");
+  }
+
+  if (filters.priceLevels.length > 0) {
+    params.set("priceLevel", filters.priceLevels.join(","));
+  }
+
+  if (filters.tags.length > 0) {
+    params.set("tags", filters.tags.join(","));
+  }
 
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), 5000);

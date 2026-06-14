@@ -2,7 +2,7 @@
 
 ## Status
 
-todo
+done
 
 ## Goal
 
@@ -30,3 +30,14 @@ Make the project demoable without manual CSV upload or external APIs.
 
 - Seed smoke check
 - Nearby search returns seeded cafes
+
+## Completion Notes
+
+- Status: done
+- Changed: added a Flyway seed migration that creates 200 synthetic cafes across 10 Seoul neighborhoods, documented automatic seed behavior in the README, and updated task status.
+- Verification:
+  - `git diff --check`: passed; Git reported expected LF-to-CRLF working-copy warnings only.
+  - `docker compose config`: not run successfully because `docker` is not installed or not available on PATH in this environment.
+  - `gradle test`: not run successfully because the repo has no Gradle wrapper and `gradle` is not installed or not available on PATH in this environment.
+  - Seed smoke check and nearby search smoke check: not run because Docker/PostgreSQL tooling is unavailable in this environment.
+- Notes: seed data is synthetic, deterministic, and idempotent by generated cafe name. Skills used: implement-task workflow requested; the registered local skill was unavailable in this session, so the repository task workflow was followed manually.

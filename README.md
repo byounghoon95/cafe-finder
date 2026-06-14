@@ -44,6 +44,7 @@ POSTGRES_PASSWORD=cafe_password
 ```
 
 PostGIS is enabled by `infra/postgres/init/01-postgis.sql` on first database initialization.
+Flyway applies the cafe schema and synthetic demo seed data when the backend starts. The seed creates 200 cafes across Gangnam, Seongsu, Hongdae, Yeonnam, Hapjeong, Euljiro, Jamsil, Sinchon, Itaewon, and Yeouido, and skips records whose generated names already exist so restarts do not duplicate local demo data.
 The backend API runs on `http://localhost:8080` by default.
 
 Useful backend URLs:

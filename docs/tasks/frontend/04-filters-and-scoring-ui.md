@@ -37,3 +37,10 @@ Expose practical filters, sorting, and recommendation explanations.
 - Changed: localized frontend-facing labels, empty/loading/error states, score labels, map fallback copy, filter tag display values, and backend recommendation reason text to Korean.
 - Verification: `npm.cmd run lint` passed; `npm.cmd run build` passed; browser check against the built app confirmed Korean first-screen labels and map fallback copy.
 - Notes: Backend enum/API parameter names remain unchanged; Korean tag values are sent as ordinary tag filter values.
+
+## Completion Notes
+
+- Status: done
+- Changed: separated boolean filters, tag filters, and price-level filters into distinct filter rows so tag chips no longer visually mix with price chips.
+- Verification: `npm.cmd run lint` passed; `npm.cmd run build` passed; browser check against the built app confirmed the tag row appears above the price row.
+- Notes: Filter state and API query behavior are unchanged.

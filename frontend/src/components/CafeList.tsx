@@ -72,11 +72,16 @@ export function CafeList({
               <span>리뷰 {cafe.reviewCount}개</span>
               <span>{"₩".repeat(cafe.priceLevel)}</span>
             </span>
-            <span className="tag-row">
+            <span className="amenity-row">
               {cafe.openNow && <span>영업 중</span>}
               {cafe.hasWifi && <span>와이파이</span>}
               {cafe.hasPower && <span>콘센트</span>}
-              <span>조용함 {cafe.quietScore}</span>
+              <span>조용함 점수 {cafe.quietScore}</span>
+            </span>
+            <span className="tag-row">
+              {cafe.tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
             </span>
             {cafe.reasons.length > 0 ? (
               <span className="cafe-reason">{cafe.reasons[0]}</span>

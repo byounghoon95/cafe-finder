@@ -55,6 +55,33 @@ declare global {
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const googleMapsLoaders = new Map<string, Promise<GoogleMapsApi>>();
 
+const searchPointIcon = {
+  fillColor: "#17211b",
+  fillOpacity: 1,
+  path: "M 0,0 m -8,0 a 8,8 0 1,0 16,0 a 8,8 0 1,0 -16,0",
+  scale: 1.25,
+  strokeColor: "#ffffff",
+  strokeWeight: 3,
+};
+
+const cafeIcon = {
+  fillColor: "#fff7d8",
+  fillOpacity: 1,
+  path: "M 0,0 m -8,0 a 8,8 0 1,0 16,0 a 8,8 0 1,0 -16,0",
+  scale: 1.1,
+  strokeColor: "#17211b",
+  strokeWeight: 2,
+};
+
+const selectedCafeIcon = {
+  fillColor: "#2f7d52",
+  fillOpacity: 1,
+  path: "M 0,0 m -8,0 a 8,8 0 1,0 16,0 a 8,8 0 1,0 -16,0",
+  scale: 1.35,
+  strokeColor: "#ffffff",
+  strokeWeight: 3,
+};
+
 type CafeMapProps = {
   cafes?: Cafe[];
   selectedCafeId?: number | null;
@@ -169,8 +196,10 @@ export function CafeMap({
 
     if (!markerRef.current) {
       markerRef.current = new maps.Marker({
+        icon: searchPointIcon,
         map,
         title: "선택한 검색 위치",
+        zIndex: 3,
       });
     }
 
@@ -202,11 +231,13 @@ export function CafeMap({
 
     cafeMarkersRef.current.forEach((marker) => marker.setMap(null));
     cafeMarkersRef.current = cafes.map((cafe) => {
+      const isSelected = cafe.id === selectedCafeId;
       const marker = new maps.Marker({
-        label: cafe.id === selectedCafeId ? "선" : "카",
+        icon: isSelected ? selectedCafeIcon : cafeIcon,
         map,
         position: { lat: cafe.latitude, lng: cafe.longitude },
         title: cafe.name,
+        zIndex: isSelected ? 2 : 1,
       });
 
       marker.addListener("click", () => onSelectCafe?.(cafe.id));
@@ -252,18 +283,28 @@ function MapFallback({
       <div className="absolute right-4 top-24 flex flex-col gap-2">
         {cafes.map((cafe) => (
           <span
-            className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-bold shadow-lg ${
+            aria-label={`${cafe.name} 선택`}
+            className={`block h-8 w-8 rounded-full border-2 shadow-lg ${
               cafe.id === selectedCafeId
-                ? "bg-cafe-leaf text-white"
-                : "bg-white text-cafe-ink"
+                ? "border-white bg-cafe-leaf ring-2 ring-white/70"
+                : "border-cafe-ink bg-[#fff7d8]"
             }`}
             key={cafe.id}
             onClick={(event) => {
               event.stopPropagation();
               onSelectCafe?.(cafe.id);
             }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                event.stopPropagation();
+                onSelectCafe?.(cafe.id);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            title={cafe.name}
           >
-            {cafe.priceLevel}
           </span>
         ))}
       </div>

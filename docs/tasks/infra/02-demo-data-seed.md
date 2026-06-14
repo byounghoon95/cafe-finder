@@ -48,3 +48,10 @@ Make the project demoable without manual CSV upload or external APIs.
 - Changed: localized generated seed cafe names, district labels, synthetic Seoul addresses, and seed tag values to Korean while preserving deterministic 200-row generation.
 - Verification: `npm.cmd run lint` passed; `npm.cmd run build` passed; backend `gradle test` could not run because `gradle` is not installed or available on PATH in this environment.
 - Notes: The Flyway migration version is unchanged; existing databases that already applied this migration need a fresh volume/database reset to reseed with the Korean demo rows.
+
+## Completion Notes
+
+- Status: done
+- Changed: added a Flyway normalization migration that translates legacy English demo tags and removes `조용함` tags from cafes where `quiet_score < 70`.
+- Verification: `git diff --check` passed; `npm.cmd run lint` passed; `npm.cmd run build` passed.
+- Notes: Existing migrations are left unchanged to avoid Flyway checksum mismatches; the new migration normalizes both existing databases and fresh databases after the seed migration. Docker, psql, and Gradle are not available in this environment, so live Flyway/database verification could not be run here.

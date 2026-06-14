@@ -26,10 +26,10 @@ export const defaultCenter: SearchPoint = {
 export const radiusOptions = [300, 500, 1000] as const;
 export const priceLevelOptions = [1, 2, 3, 4] as const;
 export const tagOptions = [
-  "work-friendly",
-  "dessert",
-  "quiet",
-  "specialty-coffee",
+  "작업하기 좋음",
+  "디저트",
+  "조용함",
+  "스페셜티 커피",
 ] as const;
 
 export const defaultFilters: SearchFilters = {

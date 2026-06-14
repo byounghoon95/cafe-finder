@@ -88,27 +88,27 @@ public class CafeRecommendationScoringService {
         List<String> reasons = new ArrayList<>();
 
         if (distanceScore >= 85) {
-            reasons.add("Very close to the selected point.");
+            reasons.add("선택한 위치에서 매우 가깝습니다.");
         } else if (distanceScore >= 60) {
-            reasons.add("Close to the selected point.");
+            reasons.add("선택한 위치에서 가까운 편입니다.");
         }
 
         if (cafe.hasWifi() && cafe.hasPower()) {
-            reasons.add("Wifi and power outlets make it good for working.");
+            reasons.add("와이파이와 콘센트가 있어 작업하기 좋습니다.");
         } else if (workFriendlyScore >= 50) {
-            reasons.add("Work-friendly amenities are available.");
+            reasons.add("작업에 필요한 편의시설을 갖추고 있습니다.");
         }
 
         if (quietScore >= 70) {
-            reasons.add("Quietness score is high for this dataset.");
+            reasons.add("이 데모 데이터 기준 조용함 점수가 높습니다.");
         }
 
         if (popularityScore >= 70) {
-            reasons.add("Review count is strong for this demo dataset.");
+            reasons.add("이 데모 데이터 기준 리뷰 수가 많은 편입니다.");
         }
 
         if (reasons.isEmpty()) {
-            reasons.add("Balanced option based on distance, rating, and amenities.");
+            reasons.add("거리, 평점, 편의시설이 균형 잡힌 선택지입니다.");
         }
 
         return reasons.stream().limit(4).toList();

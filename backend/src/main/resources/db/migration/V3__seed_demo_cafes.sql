@@ -1,15 +1,15 @@
 WITH districts(district_name, center_lat, center_lng, street_name, district_order) AS (
     VALUES
-        ('Gangnam', 37.497900, 127.027600, 'Gangnam-daero, Gangnam-gu', 1),
-        ('Seongsu', 37.544600, 127.055900, 'Seongsui-ro, Seongdong-gu', 2),
-        ('Hongdae', 37.556300, 126.923600, 'Hongik-ro, Mapo-gu', 3),
-        ('Yeonnam', 37.562700, 126.925300, 'Donggyo-ro, Mapo-gu', 4),
-        ('Hapjeong', 37.549900, 126.914500, 'Yanghwa-ro, Mapo-gu', 5),
-        ('Euljiro', 37.566000, 126.991900, 'Eulji-ro, Jung-gu', 6),
-        ('Jamsil', 37.513300, 127.100200, 'Olympic-ro, Songpa-gu', 7),
-        ('Sinchon', 37.559800, 126.942400, 'Yonsei-ro, Seodaemun-gu', 8),
-        ('Itaewon', 37.534500, 126.994600, 'Itaewon-ro, Yongsan-gu', 9),
-        ('Yeouido', 37.521900, 126.924500, 'Yeouidaebang-ro, Yeongdeungpo-gu', 10)
+        ('강남', 37.497900, 127.027600, '강남구 강남대로', 1),
+        ('성수', 37.544600, 127.055900, '성동구 성수이로', 2),
+        ('홍대', 37.556300, 126.923600, '마포구 홍익로', 3),
+        ('연남', 37.562700, 126.925300, '마포구 동교로', 4),
+        ('합정', 37.549900, 126.914500, '마포구 양화로', 5),
+        ('을지로', 37.566000, 126.991900, '중구 을지로', 6),
+        ('잠실', 37.513300, 127.100200, '송파구 올림픽로', 7),
+        ('신촌', 37.559800, 126.942400, '서대문구 연세로', 8),
+        ('이태원', 37.534500, 126.994600, '용산구 이태원로', 9),
+        ('여의도', 37.521900, 126.924500, '영등포구 여의대방로', 10)
 ),
 cafe_numbers(cafe_number) AS (
     SELECT generate_series(1, 20)
@@ -18,7 +18,7 @@ seed_cafes AS (
     SELECT
         CONCAT(d.district_name, ' ', names.name_part, ' ', LPAD(c.cafe_number::text, 2, '0')) AS name,
         d.district_name AS district,
-        CONCAT((c.cafe_number * 3 + d.district_order), ' ', d.street_name, ', Seoul') AS address,
+        CONCAT('서울특별시 ', d.street_name, ' ', (c.cafe_number * 3 + d.district_order), '길') AS address,
         ROUND((
             d.center_lat
             + ((((c.cafe_number - 1) % 5) - 2) * 0.0012)
@@ -47,36 +47,36 @@ seed_cafes AS (
         52 + ((c.cafe_number * 7 + d.district_order * 5) % 45) AS quiet_score,
         18 + ((c.cafe_number * 9 + d.district_order * 4) % 70) AS seat_count,
         CASE
-            WHEN c.cafe_number % 6 = 0 THEN ARRAY['quiet', 'specialty-coffee', 'study']
-            WHEN c.cafe_number % 5 = 0 THEN ARRAY['dessert', 'brunch', 'pet-friendly']
-            WHEN c.cafe_number % 4 = 0 THEN ARRAY['work-friendly', 'power-friendly', 'late-night']
-            WHEN c.cafe_number % 3 = 0 THEN ARRAY['work-friendly', 'dessert', 'specialty-coffee']
-            ELSE ARRAY['work-friendly', 'quiet', 'espresso']
+            WHEN c.cafe_number % 6 = 0 THEN ARRAY['조용함', '스페셜티 커피', '공부하기 좋음']
+            WHEN c.cafe_number % 5 = 0 THEN ARRAY['디저트', '브런치', '반려동물 동반']
+            WHEN c.cafe_number % 4 = 0 THEN ARRAY['작업하기 좋음', '콘센트 많음', '늦게까지 영업']
+            WHEN c.cafe_number % 3 = 0 THEN ARRAY['작업하기 좋음', '디저트', '스페셜티 커피']
+            ELSE ARRAY['작업하기 좋음', '조용함', '에스프레소']
         END AS tags
     FROM districts d
     CROSS JOIN cafe_numbers c
     CROSS JOIN LATERAL (
         SELECT (ARRAY[
-            'Coffee Lab',
-            'Roastery',
-            'Study Bar',
-            'Bean House',
-            'Brew Room',
-            'Dessert Cafe',
-            'Corner Coffee',
-            'Quiet Table',
-            'Espresso Works',
-            'Filter Bar',
-            'Daily Mug',
-            'Work Lounge',
-            'Slow Brew',
-            'Terrace Cafe',
-            'Drip Studio',
-            'Milk Bar',
-            'Cafe Atelier',
-            'Reading Room',
-            'Neighborhood Brew',
-            'Morning Cup'
+            '커피 연구소',
+            '로스터리',
+            '스터디 바',
+            '빈 하우스',
+            '브루 룸',
+            '디저트 카페',
+            '코너 커피',
+            '조용한 테이블',
+            '에스프레소 웍스',
+            '필터 바',
+            '데일리 머그',
+            '워크 라운지',
+            '슬로우 브루',
+            '테라스 카페',
+            '드립 스튜디오',
+            '밀크 바',
+            '카페 아틀리에',
+            '리딩 룸',
+            '동네 브루',
+            '모닝 컵'
         ])[c.cafe_number] AS name_part
     ) names
 )

@@ -41,3 +41,10 @@ Make the project demoable without manual CSV upload or external APIs.
   - `gradle test`: not run successfully because the repo has no Gradle wrapper and `gradle` is not installed or not available on PATH in this environment.
   - Seed smoke check and nearby search smoke check: not run because Docker/PostgreSQL tooling is unavailable in this environment.
 - Notes: seed data is synthetic, deterministic, and idempotent by generated cafe name. Skills used: implement-task workflow requested; the registered local skill was unavailable in this session, so the repository task workflow was followed manually.
+
+## Completion Notes
+
+- Status: done
+- Changed: localized generated seed cafe names, district labels, synthetic Seoul addresses, and seed tag values to Korean while preserving deterministic 200-row generation.
+- Verification: `npm.cmd run lint` passed; `npm.cmd run build` passed; backend `gradle test` could not run because `gradle` is not installed or available on PATH in this environment.
+- Notes: The Flyway migration version is unchanged; existing databases that already applied this migration need a fresh volume/database reset to reseed with the Korean demo rows.

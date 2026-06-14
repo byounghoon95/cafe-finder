@@ -45,7 +45,7 @@ function App() {
               CafeRadar
             </p>
             <h1 className="text-lg font-semibold text-cafe-ink">
-              Pick a point to search nearby cafes
+              지도를 눌러 주변 카페를 찾아보세요
             </h1>
           </div>
           <SearchControls />
@@ -56,10 +56,10 @@ function App() {
           <header className="panel-header">
             <div>
               <p className="eyebrow">CafeRadar</p>
-              <h2>Nearby cafes</h2>
+              <h2>주변 카페</h2>
             </div>
             <p className="result-count">
-              {nearbyQuery.isFetching ? "Searching..." : `${cafes.length} found`}
+              {nearbyQuery.isFetching ? "검색 중..." : `${cafes.length}곳`}
             </p>
           </header>
           <CafeList

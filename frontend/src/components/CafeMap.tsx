@@ -63,7 +63,7 @@ type CafeMapProps = {
 
 function loadGoogleMaps(apiKey: string | undefined): Promise<GoogleMapsApi> {
   if (!apiKey) {
-    return Promise.reject(new Error("Missing VITE_GOOGLE_MAPS_API_KEY"));
+    return Promise.reject(new Error("VITE_GOOGLE_MAPS_API_KEY가 설정되지 않았습니다"));
   }
 
   if (window.google?.maps) {
@@ -95,7 +95,7 @@ function loadGoogleMaps(apiKey: string | undefined): Promise<GoogleMapsApi> {
     script.defer = true;
     script.onerror = () => {
       delete window[callbackName];
-      reject(new Error("Google Maps failed to load"));
+      reject(new Error("Google Maps를 불러오지 못했습니다"));
     };
 
     document.head.append(script);
@@ -170,7 +170,7 @@ export function CafeMap({
     if (!markerRef.current) {
       markerRef.current = new maps.Marker({
         map,
-        title: "Selected search point",
+        title: "선택한 검색 위치",
       });
     }
 
@@ -203,7 +203,7 @@ export function CafeMap({
     cafeMarkersRef.current.forEach((marker) => marker.setMap(null));
     cafeMarkersRef.current = cafes.map((cafe) => {
       const marker = new maps.Marker({
-        label: cafe.id === selectedCafeId ? "✓" : "C",
+        label: cafe.id === selectedCafeId ? "선" : "카",
         map,
         position: { lat: cafe.latitude, lng: cafe.longitude },
         title: cafe.name,
@@ -225,7 +225,7 @@ export function CafeMap({
     );
   }
 
-  return <div ref={mapNode} className="h-full w-full" aria-label="Cafe map" />;
+  return <div ref={mapNode} className="h-full w-full" aria-label="카페 지도" />;
 }
 
 function MapFallback({
@@ -268,10 +268,10 @@ function MapFallback({
         ))}
       </div>
       <div className="absolute bottom-4 left-4 max-w-sm rounded-lg bg-white/95 p-3 text-sm shadow-panel">
-        <p className="font-semibold text-cafe-ink">Map preview mode</p>
+        <p className="font-semibold text-cafe-ink">지도 미리보기 모드</p>
         <p className="mt-1 text-slate-700">
-          {error}. Set VITE_GOOGLE_MAPS_API_KEY to load Google Maps. Click here
-          to select the default Seongsu point.
+          {error}. Google Maps를 불러오려면 VITE_GOOGLE_MAPS_API_KEY를 설정하세요.
+          이 영역을 누르면 기본 성수 위치가 선택됩니다.
         </p>
       </div>
     </button>

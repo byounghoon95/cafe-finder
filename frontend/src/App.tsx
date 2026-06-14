@@ -11,12 +11,14 @@ function App() {
   const selectedPoint = useSearchStore((state) => state.selectedPoint);
   const radiusMeters = useSearchStore((state) => state.radiusMeters);
   const sort = useSearchStore((state) => state.sort);
+  const filters = useSearchStore((state) => state.filters);
   const selectedCafeId = useSearchStore((state) => state.selectedCafeId);
   const setSelectedCafeId = useSearchStore((state) => state.setSelectedCafeId);
 
   const nearbyQuery = useQuery({
-    queryKey: ["nearby-cafes", selectedPoint, radiusMeters, sort],
-    queryFn: () => fetchNearbyCafes({ selectedPoint, radiusMeters, sort }),
+    queryKey: ["nearby-cafes", selectedPoint, radiusMeters, sort, filters],
+    queryFn: () =>
+      fetchNearbyCafes({ selectedPoint, radiusMeters, sort, filters }),
     enabled: Boolean(selectedPoint),
     retry: false,
   });

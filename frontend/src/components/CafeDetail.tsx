@@ -59,6 +59,47 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
           <span key={tag}>{tag}</span>
         ))}
       </div>
+
+      <section className="score-panel" aria-label="Recommendation score">
+        <div className="score-summary">
+          <div>
+            <p className="eyebrow">Recommendation</p>
+            <h3>{Math.round(cafe.recommendationScore)} / 100</h3>
+          </div>
+          <p>Ranked from rating, distance, work amenities, quietness, and review volume.</p>
+        </div>
+
+        <dl className="score-grid">
+          <div>
+            <dt>Rating</dt>
+            <dd>{Math.round(cafe.scoreBreakdown.ratingScore)}</dd>
+          </div>
+          <div>
+            <dt>Distance</dt>
+            <dd>{Math.round(cafe.scoreBreakdown.distanceScore)}</dd>
+          </div>
+          <div>
+            <dt>Work</dt>
+            <dd>{Math.round(cafe.scoreBreakdown.workFriendlyScore)}</dd>
+          </div>
+          <div>
+            <dt>Quiet</dt>
+            <dd>{Math.round(cafe.scoreBreakdown.quietScore)}</dd>
+          </div>
+          <div>
+            <dt>Popularity</dt>
+            <dd>{Math.round(cafe.scoreBreakdown.popularityScore)}</dd>
+          </div>
+        </dl>
+
+        {cafe.reasons.length > 0 ? (
+          <ul className="reason-list">
+            {cafe.reasons.map((reason) => (
+              <li key={reason}>{reason}</li>
+            ))}
+          </ul>
+        ) : null}
+      </section>
     </section>
   );
 }

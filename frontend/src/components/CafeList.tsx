@@ -17,7 +17,7 @@ export function CafeList({
   isLoading,
   selectedCafeId,
   selectedPoint,
-  onSelectCafe
+  onSelectCafe,
 }: CafeListProps) {
   if (!selectedPoint) {
     return (
@@ -56,9 +56,16 @@ export function CafeList({
             onClick={() => onSelectCafe(cafe.id)}
             type="button"
           >
-            <span className="cafe-card-main">
-              <strong>{cafe.name}</strong>
-              <span>{cafe.district} - {cafe.distanceMeters}m away</span>
+            <span className="cafe-card-topline">
+              <span className="cafe-card-main">
+                <strong>{cafe.name}</strong>
+                <span>
+                  {cafe.district} - {cafe.distanceMeters}m away
+                </span>
+              </span>
+              <span className="score-badge">
+                {Math.round(cafe.recommendationScore)}
+              </span>
             </span>
             <span className="cafe-meta">
               <span>{cafe.rating.toFixed(1)}</span>
@@ -71,6 +78,9 @@ export function CafeList({
               {cafe.hasPower && <span>Power</span>}
               <span>Quiet {cafe.quietScore}</span>
             </span>
+            {cafe.reasons.length > 0 ? (
+              <span className="cafe-reason">{cafe.reasons[0]}</span>
+            ) : null}
           </button>
         </li>
       ))}

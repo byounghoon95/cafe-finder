@@ -22,6 +22,9 @@ public record NearbyCafeResultResponse(
         boolean hasPower,
         int quietScore,
         int seatCount,
-        List<String> tags
+        List<String> tags,
+        int recommendationScore,
+        CafeScoreBreakdown scoreBreakdown,
+        List<String> reasons
 ) {
 }

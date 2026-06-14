@@ -90,71 +90,82 @@ export function SearchControls() {
         </label>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 text-sm">
-        {[
-          ["openNow", "영업 중"],
-          ["hasWifi", "와이파이"],
-          ["hasPower", "콘센트"],
-          ["quiet", "조용함"],
-        ].map(([filter, label]) => (
-          <button
-            className={`filter-chip ${
-              filters[filter as keyof typeof filters]
-                ? "bg-cafe-leaf text-white shadow"
-                : "bg-stone-100 text-slate-700 hover:bg-white"
-            }`}
-            key={filter}
-            onClick={() =>
-              setBooleanFilter(
-                filter as "openNow" | "hasWifi" | "hasPower" | "quiet",
-                !filters[filter as keyof typeof filters],
-              )
-            }
-            type="button"
-          >
-            {label}
-          </button>
-        ))}
-        <span className="ml-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-          가격대
-        </span>
-        {priceLevelOptions.map((priceLevel) => (
-          <button
-            className={`filter-chip ${
-              filters.priceLevels.includes(priceLevel)
-                ? "bg-cafe-leaf text-white shadow"
-                : "bg-stone-100 text-slate-700 hover:bg-white"
-            }`}
-            key={priceLevel}
-            onClick={() => togglePriceLevel(priceLevel)}
-            type="button"
-          >
-            {"₩".repeat(priceLevel)}
-          </button>
-        ))}
-        {tagOptions.map((tag) => (
-          <button
-            className={`filter-chip ${
-              filters.tags.includes(tag)
-                ? "bg-cafe-leaf text-white shadow"
-                : "bg-stone-100 text-slate-700 hover:bg-white"
-            }`}
-            key={tag}
-            onClick={() => toggleTag(tag)}
-            type="button"
-          >
-            {tag}
-          </button>
-        ))}
-        {activeFilterCount > 0 ? (
-          <button
-            className="rounded-md px-2 py-1.5 text-xs font-bold text-cafe-leaf underline-offset-2 hover:underline"
-            onClick={clearFilters}
-            type="button"
-          >
-            필터 초기화 {activeFilterCount}
-          </button>
-        ) : null}
+      <div className="grid gap-2 text-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          {[
+            ["openNow", "영업 중"],
+            ["hasWifi", "와이파이"],
+            ["hasPower", "콘센트"],
+            ["quiet", "조용함"],
+          ].map(([filter, label]) => (
+            <button
+              className={`filter-chip ${
+                filters[filter as keyof typeof filters]
+                  ? "bg-cafe-leaf text-white shadow"
+                  : "bg-stone-100 text-slate-700 hover:bg-white"
+              }`}
+              key={filter}
+              onClick={() =>
+                setBooleanFilter(
+                  filter as "openNow" | "hasWifi" | "hasPower" | "quiet",
+                  !filters[filter as keyof typeof filters],
+                )
+              }
+              type="button"
+            >
+              {label}
+            </button>
+          ))}
+          {activeFilterCount > 0 ? (
+            <button
+              className="rounded-md px-2 py-1.5 text-xs font-bold text-cafe-leaf underline-offset-2 hover:underline"
+              onClick={clearFilters}
+              type="button"
+            >
+              필터 초기화 {activeFilterCount}
+            </button>
+          ) : null}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="min-w-10 text-xs font-bold uppercase tracking-wide text-slate-500">
+            태그
+          </span>
+          {tagOptions.map((tag) => (
+            <button
+              className={`filter-chip ${
+                filters.tags.includes(tag)
+                  ? "bg-cafe-leaf text-white shadow"
+                  : "bg-stone-100 text-slate-700 hover:bg-white"
+              }`}
+              key={tag}
+              onClick={() => toggleTag(tag)}
+              type="button"
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="min-w-10 text-xs font-bold uppercase tracking-wide text-slate-500">
+            가격대
+          </span>
+          {priceLevelOptions.map((priceLevel) => (
+            <button
+              className={`filter-chip ${
+                filters.priceLevels.includes(priceLevel)
+                  ? "bg-cafe-leaf text-white shadow"
+                  : "bg-stone-100 text-slate-700 hover:bg-white"
+              }`}
+              key={priceLevel}
+              onClick={() => togglePriceLevel(priceLevel)}
+              type="button"
+            >
+              {"₩".repeat(priceLevel)}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

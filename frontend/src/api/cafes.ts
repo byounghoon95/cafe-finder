@@ -53,10 +53,6 @@ export async function fetchNearbyCafes({
     params.set("hasPower", "true");
   }
 
-  if (filters.quiet) {
-    params.set("quiet", "true");
-  }
-
   if (filters.priceLevels.length > 0) {
     params.set("priceLevel", filters.priceLevels.join(","));
   }

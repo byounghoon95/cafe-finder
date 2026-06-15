@@ -65,11 +65,10 @@ public class CafeSearchService {
                 isOpenNow(cafe.getOpensAt(), cafe.getClosesAt()),
                 Boolean.TRUE.equals(cafe.getHasWifi()),
                 Boolean.TRUE.equals(cafe.getHasPower()),
-                cafe.getQuietScore(),
                 cafe.getSeatCount(),
                 tagsAsList(cafe.getTags()),
                 0,
-                new CafeScoreBreakdown(0, 0, 0, 0, 0),
+                new CafeScoreBreakdown(0, 0, 0, 0),
                 List.of()
         );
         CafeRecommendationScore score = scoringService.score(response, radiusMeters);
@@ -89,7 +88,6 @@ public class CafeSearchService {
                 response.openNow(),
                 response.hasWifi(),
                 response.hasPower(),
-                response.quietScore(),
                 response.seatCount(),
                 response.tags(),
                 score.recommendationScore(),
@@ -106,9 +104,6 @@ public class CafeSearchService {
             return false;
         }
         if (Boolean.TRUE.equals(request.hasPower()) && !cafe.hasPower()) {
-            return false;
-        }
-        if (Boolean.TRUE.equals(request.quiet()) && cafe.quietScore() < 70) {
             return false;
         }
         if (!request.priceLevels().isEmpty() && !request.priceLevels().contains(cafe.priceLevel())) {
@@ -134,8 +129,6 @@ public class CafeSearchService {
             case RATING -> Comparator.comparing(NearbyCafeResultResponse::rating).reversed()
                     .thenComparingInt(NearbyCafeResultResponse::distanceMeters);
             case REVIEWS -> Comparator.comparingInt(NearbyCafeResultResponse::reviewCount).reversed()
-                    .thenComparingInt(NearbyCafeResultResponse::distanceMeters);
-            case QUIET -> Comparator.comparingInt(NearbyCafeResultResponse::quietScore).reversed()
                     .thenComparingInt(NearbyCafeResultResponse::distanceMeters);
         };
     }

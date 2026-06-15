@@ -9,7 +9,6 @@ public record NearbyCafeSearchRequest(
         Boolean openNow,
         Boolean hasWifi,
         Boolean hasPower,
-        Boolean quiet,
         List<Integer> priceLevels,
         List<String> tags,
         CafeSearchSort sort

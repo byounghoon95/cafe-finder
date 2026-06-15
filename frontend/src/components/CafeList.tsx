@@ -76,7 +76,6 @@ export function CafeList({
               {cafe.openNow && <span>영업 중</span>}
               {cafe.hasWifi && <span>와이파이</span>}
               {cafe.hasPower && <span>콘센트</span>}
-              <span>조용함 점수 {cafe.quietScore}</span>
             </span>
             <span className="tag-row">
               {cafe.tags.map((tag) => (

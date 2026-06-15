@@ -40,7 +40,6 @@ class CafeControllerTest {
                         .param("openNow", "true")
                         .param("hasWifi", "true")
                         .param("hasPower", "true")
-                        .param("quiet", "true")
                         .param("priceLevel", "1,2")
                         .param("tags", "work-friendly,dessert")
                         .param("sort", "distance")

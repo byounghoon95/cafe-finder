@@ -35,7 +35,6 @@ public class CafeController {
             @RequestParam(required = false) Boolean openNow,
             @RequestParam(required = false) Boolean hasWifi,
             @RequestParam(required = false) Boolean hasPower,
-            @RequestParam(required = false) Boolean quiet,
             @RequestParam(required = false) String priceLevel,
             @RequestParam(required = false) String tags,
             @RequestParam(required = false) String sort
@@ -51,7 +50,6 @@ public class CafeController {
                 openNow,
                 hasWifi,
                 hasPower,
-                quiet,
                 parsePriceLevels(priceLevel),
                 parseCsv(tags),
                 CafeSearchSort.from(sort)

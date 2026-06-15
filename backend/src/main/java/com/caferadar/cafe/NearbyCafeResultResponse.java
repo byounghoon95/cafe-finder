@@ -20,7 +20,6 @@ public record NearbyCafeResultResponse(
         boolean openNow,
         boolean hasWifi,
         boolean hasPower,
-        int quietScore,
         int seatCount,
         List<String> tags,
         int recommendationScore,

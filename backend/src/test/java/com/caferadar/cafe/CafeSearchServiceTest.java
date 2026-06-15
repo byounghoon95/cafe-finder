@@ -26,9 +26,9 @@ class CafeSearchServiceTest {
     void searchFiltersNearbyCafes() {
         when(cafeRepository.findWithinRadius(37.5, 127.0, 500))
                 .thenReturn(List.of(
-                        view(1L, "Close Quiet", 80.0, 4.6, 120, 2, true, true, 82, "work-friendly"),
-                        view(2L, "Far Loud", 420.0, 4.9, 500, 3, true, false, 50, "dessert"),
-                        view(3L, "No Wifi", 120.0, 4.7, 90, 2, false, true, 88, "work-friendly")
+                        view(1L, "Close Cafe", 80.0, 4.6, 120, 2, true, true, "work-friendly"),
+                        view(2L, "Far Cafe", 420.0, 4.9, 500, 3, true, false, "dessert"),
+                        view(3L, "No Wifi", 120.0, 4.7, 90, 2, false, true, "work-friendly")
                 ));
 
         NearbyCafeResponse response = service.search(new NearbyCafeSearchRequest(
@@ -38,13 +38,12 @@ class CafeSearchServiceTest {
                 true,
                 true,
                 true,
-                true,
                 List.of(2),
                 List.of("work-friendly"),
                 CafeSearchSort.DISTANCE
         ));
 
-        assertThat(response.cafes()).extracting(NearbyCafeResultResponse::name).containsExactly("Close Quiet");
+        assertThat(response.cafes()).extracting(NearbyCafeResultResponse::name).containsExactly("Close Cafe");
         assertThat(response.cafes().get(0).distanceMeters()).isEqualTo(80);
         assertThat(response.cafes().get(0).openNow()).isTrue();
     }
@@ -53,15 +52,14 @@ class CafeSearchServiceTest {
     void searchSortsByRating() {
         when(cafeRepository.findWithinRadius(37.5, 127.0, 1000))
                 .thenReturn(List.of(
-                        view(1L, "Lower Rated", 100.0, 4.1, 50, 2, true, true, 80, "work-friendly"),
-                        view(2L, "Higher Rated", 400.0, 4.8, 50, 2, true, true, 80, "work-friendly")
+                        view(1L, "Lower Rated", 100.0, 4.1, 50, 2, true, true, "work-friendly"),
+                        view(2L, "Higher Rated", 400.0, 4.8, 50, 2, true, true, "work-friendly")
                 ));
 
         NearbyCafeResponse response = service.search(new NearbyCafeSearchRequest(
                 37.5,
                 127.0,
                 1000,
-                null,
                 null,
                 null,
                 null,
@@ -78,16 +76,15 @@ class CafeSearchServiceTest {
     void searchSortsByRecommendationScore() {
         when(cafeRepository.findWithinRadius(37.5, 127.0, 500))
                 .thenReturn(List.of(
-                        view(1L, "Closer Lower Score", 40.0, 3.8, 20, 2, false, false, 40, "dessert"),
-                        view(2L, "Farther Better Score", 180.0, 4.8, 500, 2, true, true, 90, "work-friendly"),
-                        view(3L, "Highest Score", 80.0, 4.8, 500, 2, true, true, 90, "work-friendly")
+                        view(1L, "Closer Lower Score", 40.0, 3.8, 20, 2, false, false, "dessert"),
+                        view(2L, "Farther Better Score", 180.0, 4.8, 500, 2, true, true, "work-friendly"),
+                        view(3L, "Highest Score", 80.0, 4.8, 500, 2, true, true, "work-friendly")
                 ));
 
         NearbyCafeResponse response = service.search(new NearbyCafeSearchRequest(
                 37.5,
                 127.0,
                 500,
-                null,
                 null,
                 null,
                 null,
@@ -114,7 +111,6 @@ class CafeSearchServiceTest {
             int priceLevel,
             boolean hasWifi,
             boolean hasPower,
-            int quietScore,
             String... tags
     ) {
         return new CafeDistanceView() {
@@ -181,11 +177,6 @@ class CafeSearchServiceTest {
             @Override
             public Boolean getHasPower() {
                 return hasPower;
-            }
-
-            @Override
-            public Integer getQuietScore() {
-                return quietScore;
             }
 
             @Override

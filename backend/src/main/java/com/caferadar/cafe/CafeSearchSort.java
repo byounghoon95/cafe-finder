@@ -9,8 +9,7 @@ public enum CafeSearchSort {
     RECOMMENDATION("recommendation"),
     DISTANCE("distance"),
     RATING("rating"),
-    REVIEWS("reviews"),
-    QUIET("quiet");
+    REVIEWS("reviews");
 
     private final String value;
 

@@ -31,8 +31,6 @@ public interface CafeDistanceView {
 
     Boolean getHasPower();
 
-    Integer getQuietScore();
-
     Integer getSeatCount();
 
     String getTags();

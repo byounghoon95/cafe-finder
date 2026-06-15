@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,7 @@ public class CafeSearchService {
     private final CafeRecommendationScoringService scoringService;
     private final Clock clock;
 
+    @Autowired
     public CafeSearchService(CafeRepository cafeRepository, CafeRecommendationScoringService scoringService) {
         this(cafeRepository, scoringService, Clock.systemDefaultZone());
     }

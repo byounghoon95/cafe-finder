@@ -1,4 +1,4 @@
-package com.caferadar.cafe;
+package com.caferadar.api;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -8,6 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+
+import com.caferadar.cafe.CafeSearchService;
+import com.caferadar.cafe.CafeSearchSort;
+import com.caferadar.cafe.dto.NearbyCafeQueryResponse;
+import com.caferadar.cafe.dto.NearbyCafeResponse;
+import com.caferadar.cafe.dto.NearbyCafeSearchRequest;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

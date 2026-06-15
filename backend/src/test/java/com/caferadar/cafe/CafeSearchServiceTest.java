@@ -10,6 +10,10 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
 
+import com.caferadar.cafe.dto.NearbyCafeResponse;
+import com.caferadar.cafe.dto.NearbyCafeResultResponse;
+import com.caferadar.cafe.dto.NearbyCafeSearchRequest;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

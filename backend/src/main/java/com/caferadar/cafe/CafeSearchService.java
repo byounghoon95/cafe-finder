@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import com.caferadar.cafe.dto.CafeScoreBreakdown;
+import com.caferadar.cafe.dto.NearbyCafeQueryResponse;
+import com.caferadar.cafe.dto.NearbyCafeResponse;
+import com.caferadar.cafe.dto.NearbyCafeResultResponse;
+import com.caferadar.cafe.dto.NearbyCafeSearchRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

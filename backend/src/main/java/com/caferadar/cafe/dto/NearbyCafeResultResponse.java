@@ -1,4 +1,4 @@
-package com.caferadar.cafe;
+package com.caferadar.cafe.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;

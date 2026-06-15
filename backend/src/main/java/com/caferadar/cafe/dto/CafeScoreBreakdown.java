@@ -1,4 +1,4 @@
-package com.caferadar.cafe;
+package com.caferadar.cafe.dto;
 
 public record CafeScoreBreakdown(
         int ratingScore,

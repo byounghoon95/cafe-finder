@@ -1,7 +1,12 @@
-package com.caferadar.cafe;
+package com.caferadar.api;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.caferadar.cafe.CafeSearchService;
+import com.caferadar.cafe.CafeSearchSort;
+import com.caferadar.cafe.dto.NearbyCafeResponse;
+import com.caferadar.cafe.dto.NearbyCafeSearchRequest;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

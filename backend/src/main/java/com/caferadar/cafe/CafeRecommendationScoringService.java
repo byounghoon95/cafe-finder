@@ -5,6 +5,9 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.caferadar.cafe.dto.CafeScoreBreakdown;
+import com.caferadar.cafe.dto.NearbyCafeResultResponse;
+
 import org.springframework.stereotype.Service;
 
 @Service

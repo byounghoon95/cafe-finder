@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.caferadar.cafe.dto.CafeScoreBreakdown;
+import com.caferadar.cafe.dto.NearbyCafeResultResponse;
+
 import org.junit.jupiter.api.Test;
 
 class CafeRecommendationScoringServiceTest {

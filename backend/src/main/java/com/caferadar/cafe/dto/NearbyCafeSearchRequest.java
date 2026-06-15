@@ -1,6 +1,8 @@
-package com.caferadar.cafe;
+package com.caferadar.cafe.dto;
 
 import java.util.List;
+
+import com.caferadar.cafe.CafeSearchSort;
 
 public record NearbyCafeSearchRequest(
         double latitude,

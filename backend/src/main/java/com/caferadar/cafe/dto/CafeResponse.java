@@ -1,8 +1,10 @@
-package com.caferadar.cafe;
+package com.caferadar.cafe.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.List;
+
+import com.caferadar.cafe.Cafe;
 
 public record CafeResponse(
         Long id,

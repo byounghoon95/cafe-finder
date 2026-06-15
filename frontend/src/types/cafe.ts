@@ -2,7 +2,6 @@ export type ScoreBreakdown = {
   ratingScore: number;
   distanceScore: number;
   workFriendlyScore: number;
-  quietScore: number;
   popularityScore: number;
 };
 
@@ -22,7 +21,6 @@ export type Cafe = {
   openNow: boolean;
   hasWifi: boolean;
   hasPower: boolean;
-  quietScore: number;
   seatCount: number;
   tags: string[];
   recommendationScore: number;

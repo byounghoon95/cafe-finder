@@ -20,16 +20,14 @@ class CafeRecommendationScoringServiceTest {
                 250,
                 true,
                 true,
-                80,
                 40
         ), 500);
 
-        assertThat(score.recommendationScore()).isEqualTo(85);
-        assertThat(score.scoreBreakdown()).isEqualTo(new CafeScoreBreakdown(90, 90, 90, 80, 50));
+        assertThat(score.recommendationScore()).isEqualTo(86);
+        assertThat(score.scoreBreakdown()).isEqualTo(new CafeScoreBreakdown(90, 90, 90, 50));
         assertThat(score.reasons()).containsExactly(
                 "선택한 위치에서 매우 가깝습니다.",
-                "와이파이와 콘센트가 있어 작업하기 좋습니다.",
-                "이 데모 데이터 기준 조용함 점수가 높습니다."
+                "와이파이와 콘센트가 있어 작업하기 좋습니다."
         );
     }
 
@@ -41,12 +39,11 @@ class CafeRecommendationScoringServiceTest {
                 800,
                 true,
                 true,
-                140,
                 200
         ), 1000);
 
-        assertThat(score.recommendationScore()).isEqualTo(75);
-        assertThat(score.scoreBreakdown()).isEqualTo(new CafeScoreBreakdown(100, 0, 100, 100, 100));
+        assertThat(score.recommendationScore()).isEqualTo(70);
+        assertThat(score.scoreBreakdown()).isEqualTo(new CafeScoreBreakdown(100, 0, 100, 100));
         assertThat(score.reasons().size()).isLessThanOrEqualTo(4);
     }
 
@@ -58,7 +55,6 @@ class CafeRecommendationScoringServiceTest {
                 5,
                 false,
                 false,
-                30,
                 10
         ), 500);
 
@@ -72,7 +68,6 @@ class CafeRecommendationScoringServiceTest {
             int reviews,
             boolean hasWifi,
             boolean hasPower,
-            int quietScore,
             int seatCount
     ) {
         return new NearbyCafeResultResponse(
@@ -91,11 +86,10 @@ class CafeRecommendationScoringServiceTest {
                 true,
                 hasWifi,
                 hasPower,
-                quietScore,
                 seatCount,
                 List.of("work-friendly"),
                 0,
-                new CafeScoreBreakdown(0, 0, 0, 0, 0),
+                new CafeScoreBreakdown(0, 0, 0, 0),
                 List.of()
         );
     }

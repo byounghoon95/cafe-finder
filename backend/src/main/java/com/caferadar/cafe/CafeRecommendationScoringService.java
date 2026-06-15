@@ -12,31 +12,28 @@ public class CafeRecommendationScoringService {
 
     private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
     private static final BigDecimal FIVE = BigDecimal.valueOf(5);
-    private static final BigDecimal RATING_WEIGHT = BigDecimal.valueOf(0.30);
-    private static final BigDecimal DISTANCE_WEIGHT = BigDecimal.valueOf(0.25);
-    private static final BigDecimal WORK_FRIENDLY_WEIGHT = BigDecimal.valueOf(0.20);
-    private static final BigDecimal QUIET_WEIGHT = BigDecimal.valueOf(0.15);
+    private static final BigDecimal RATING_WEIGHT = BigDecimal.valueOf(0.35);
+    private static final BigDecimal DISTANCE_WEIGHT = BigDecimal.valueOf(0.30);
+    private static final BigDecimal WORK_FRIENDLY_WEIGHT = BigDecimal.valueOf(0.25);
     private static final BigDecimal POPULARITY_WEIGHT = BigDecimal.valueOf(0.10);
 
     public CafeRecommendationScore score(NearbyCafeResultResponse cafe, int radiusMeters) {
         int ratingScore = percentage(cafe.rating(), FIVE);
         int distanceScore = distanceScore(cafe.distanceMeters(), radiusMeters);
         int workFriendlyScore = workFriendlyScore(cafe.hasWifi(), cafe.hasPower(), cafe.seatCount());
-        int quietScore = clamp(cafe.quietScore());
         int popularityScore = percentage(BigDecimal.valueOf(cafe.reviewCount()), BigDecimal.valueOf(500));
 
         CafeScoreBreakdown breakdown = new CafeScoreBreakdown(
                 ratingScore,
                 distanceScore,
                 workFriendlyScore,
-                quietScore,
                 popularityScore
         );
 
         return new CafeRecommendationScore(
                 weightedScore(breakdown),
                 breakdown,
-                reasons(cafe, distanceScore, workFriendlyScore, quietScore, popularityScore)
+                reasons(cafe, distanceScore, workFriendlyScore, popularityScore)
         );
     }
 
@@ -45,7 +42,6 @@ public class CafeRecommendationScoringService {
                 .add(BigDecimal.valueOf(breakdown.ratingScore()).multiply(RATING_WEIGHT))
                 .add(BigDecimal.valueOf(breakdown.distanceScore()).multiply(DISTANCE_WEIGHT))
                 .add(BigDecimal.valueOf(breakdown.workFriendlyScore()).multiply(WORK_FRIENDLY_WEIGHT))
-                .add(BigDecimal.valueOf(breakdown.quietScore()).multiply(QUIET_WEIGHT))
                 .add(BigDecimal.valueOf(breakdown.popularityScore()).multiply(POPULARITY_WEIGHT));
 
         return clamp(score.setScale(0, RoundingMode.HALF_UP).intValue());
@@ -82,7 +78,6 @@ public class CafeRecommendationScoringService {
             NearbyCafeResultResponse cafe,
             int distanceScore,
             int workFriendlyScore,
-            int quietScore,
             int popularityScore
     ) {
         List<String> reasons = new ArrayList<>();
@@ -97,10 +92,6 @@ public class CafeRecommendationScoringService {
             reasons.add("와이파이와 콘센트가 있어 작업하기 좋습니다.");
         } else if (workFriendlyScore >= 50) {
             reasons.add("작업에 필요한 편의시설을 갖추고 있습니다.");
-        }
-
-        if (quietScore >= 70) {
-            reasons.add("이 데모 데이터 기준 조용함 점수가 높습니다.");
         }
 
         if (popularityScore >= 70) {

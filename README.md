@@ -18,7 +18,7 @@ CafeRadar is a GIS-based cafe discovery web app. Users click a point on the map,
 3. Click a location on the map.
 4. Select 300m, 500m, or 1km radius.
 5. View nearby cafe markers and ranked cafe list.
-6. Filter by wifi, outlets, quiet, open now, tags, and price level.
+6. Filter by wifi, outlets, open now, tags, and price level.
 7. Select a cafe to see details and recommendation reasons.
 ```
 

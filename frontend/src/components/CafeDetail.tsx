@@ -50,7 +50,6 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
       <div className="amenity-row">
         <span className={cafe.hasWifi ? "on" : ""}>와이파이</span>
         <span className={cafe.hasPower ? "on" : ""}>콘센트</span>
-        <span>조용함 점수 {cafe.quietScore}</span>
         <span>{"₩".repeat(cafe.priceLevel)}</span>
       </div>
 
@@ -66,7 +65,7 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
             <p className="eyebrow">추천 점수</p>
             <h3>{Math.round(cafe.recommendationScore)} / 100</h3>
           </div>
-          <p>평점, 거리, 작업 편의시설, 조용함, 리뷰 수를 기준으로 계산했습니다.</p>
+          <p>평점, 거리, 작업 편의시설, 리뷰 수를 기준으로 계산했습니다.</p>
         </div>
 
         <dl className="score-grid">
@@ -81,10 +80,6 @@ export function CafeDetail({ cafe }: CafeDetailProps) {
           <div>
             <dt>작업</dt>
             <dd>{Math.round(cafe.scoreBreakdown.workFriendlyScore)}</dd>
-          </div>
-          <div>
-            <dt>조용함</dt>
-            <dd>{Math.round(cafe.scoreBreakdown.quietScore)}</dd>
           </div>
           <div>
             <dt>인기도</dt>

@@ -5,13 +5,12 @@ export type Coordinates = {
 
 export type RadiusMeters = 300 | 500 | 1000;
 
-export type CafeSort = "recommendation" | "distance" | "rating" | "reviews" | "quiet";
+export type CafeSort = "recommendation" | "distance" | "rating" | "reviews";
 
 export type ScoreBreakdown = {
   ratingScore: number;
   distanceScore: number;
   workFriendlyScore: number;
-  quietScore: number;
   popularityScore: number;
 };
 
@@ -31,7 +30,6 @@ export type Cafe = {
   openNow: boolean;
   hasWifi: boolean;
   hasPower: boolean;
-  quietScore: number;
   seatCount: number;
   tags: string[];
   recommendationScore: number;

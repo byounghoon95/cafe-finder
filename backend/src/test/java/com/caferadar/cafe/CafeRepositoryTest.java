@@ -62,7 +62,6 @@ class CafeRepositoryTest {
                 LocalTime.of(22, 0),
                 true,
                 true,
-                82,
                 48,
                 new String[] {"work-friendly", "dessert"}
         );

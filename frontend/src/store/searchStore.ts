@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export type RadiusMeters = 300 | 500 | 1000;
 
-export type CafeSort = "recommendation" | "distance" | "rating" | "reviews" | "quiet";
+export type CafeSort = "recommendation" | "distance" | "rating" | "reviews";
 
 export type SearchPoint = {
   lat: number;
@@ -13,7 +13,6 @@ export type SearchFilters = {
   openNow: boolean;
   hasWifi: boolean;
   hasPower: boolean;
-  quiet: boolean;
   priceLevels: number[];
   tags: string[];
 };
@@ -28,7 +27,6 @@ export const priceLevelOptions = [1, 2, 3, 4] as const;
 export const tagOptions = [
   "작업하기 좋음",
   "디저트",
-  "조용함",
   "스페셜티 커피",
 ] as const;
 
@@ -36,7 +34,6 @@ export const defaultFilters: SearchFilters = {
   openNow: false,
   hasWifi: false,
   hasPower: false,
-  quiet: false,
   priceLevels: [],
   tags: [],
 };
@@ -51,7 +48,7 @@ type SearchState = {
   setRadiusMeters: (radiusMeters: RadiusMeters) => void;
   setSort: (sort: CafeSort) => void;
   setBooleanFilter: (
-    filter: keyof Pick<SearchFilters, "openNow" | "hasWifi" | "hasPower" | "quiet">,
+    filter: keyof Pick<SearchFilters, "openNow" | "hasWifi" | "hasPower">,
     value: boolean,
   ) => void;
   togglePriceLevel: (priceLevel: number) => void;

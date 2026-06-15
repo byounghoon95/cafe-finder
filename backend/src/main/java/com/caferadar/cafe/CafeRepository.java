@@ -23,7 +23,6 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
                 c.closes_at AS "closesAt",
                 c.has_wifi AS "hasWifi",
                 c.has_power AS "hasPower",
-                c.quiet_score AS "quietScore",
                 c.seat_count AS "seatCount",
                 array_to_string(c.tags, ',') AS tags,
                 ST_Distance(c.geom, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography) AS "distanceMeters"

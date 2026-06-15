@@ -38,7 +38,7 @@ The first version should stay intentionally small and demoable.
 3. User selects a radius: 300m, 500m, or 1000m.
 4. App displays nearby cafe markers.
 5. App displays a ranked list with distance, rating, tags, and amenities.
-6. User filters by wifi, power outlets, quiet, open now, price level, and tags.
+6. User filters by wifi, power outlets, open now, price level, and tags.
 7. User selects a cafe and sees recommendation reasons.
 
 ## 5. Tech Stack
@@ -94,7 +94,6 @@ Each cafe includes:
 - opening hours summary
 - wifi availability
 - power outlet availability
-- quietness score
 - seat count
 - tags
 
@@ -105,7 +104,6 @@ User can filter by:
 - open now
 - has wifi
 - has power outlets
-- quiet
 - price level
 - tags
 
@@ -115,7 +113,6 @@ User can sort by:
 - distance
 - rating
 - review count
-- quietness
 
 ### 6.4 Recommendation Score
 
@@ -123,10 +120,9 @@ The ranking model is rule-based and explainable.
 
 ```text
 recommendationScore =
-  ratingScore * 0.30
-  + distanceScore * 0.25
-  + workFriendlyScore * 0.20
-  + quietScore * 0.15
+  ratingScore * 0.35
+  + distanceScore * 0.30
+  + workFriendlyScore * 0.25
   + popularityScore * 0.10
 ```
 
@@ -140,7 +136,6 @@ Sub-score rules for MVP:
 - `ratingScore`: `rating / 5 * 100`.
 - `distanceScore`: 100 at 0m, linearly decreases to 0 at the selected radius.
 - `workFriendlyScore`: 40 points for wifi, 40 points for power outlets, up to 20 points from seat count capped at 80 seats.
-- `quietScore`: stored cafe quietness score, 0 to 100.
 - `popularityScore`: review count normalized with 100 points at 500 or more reviews.
 
 The response should include the final score, sub-scores, and 2-4 short explanation strings.
@@ -208,7 +203,6 @@ Suggested districts:
 | closes_at | time | required local closing time |
 | has_wifi | boolean | required |
 | has_power | boolean | required |
-| quiet_score | integer | required, 0 to 100 |
 | seat_count | integer | required, 0 or higher |
 | tags | text[] | MVP uses Postgres text array |
 | created_at | timestamp |  |
@@ -231,10 +225,9 @@ radius: required integer, one of 300, 500, 1000
 openNow: optional boolean
 hasWifi: optional boolean
 hasPower: optional boolean
-quiet: optional boolean, maps to quiet_score >= 70
 priceLevel: optional comma-separated integers from 1 to 4
 tags: optional comma-separated tag values
-sort: optional, one of recommendation,distance,rating,reviews,quiet
+sort: optional, one of recommendation,distance,rating,reviews
 ```
 
 Nearby query filters:
@@ -243,10 +236,9 @@ Nearby query filters:
 openNow=true
 hasWifi=true
 hasPower=true
-quiet=true
 priceLevel=1,2,3,4
 tags=work-friendly,dessert
-sort=recommendation,distance,rating,reviews,quiet
+sort=recommendation,distance,rating,reviews
 ```
 
 Nearby response shape:
@@ -276,7 +268,6 @@ Nearby response shape:
       "openNow": true,
       "hasWifi": true,
       "hasPower": true,
-      "quietScore": 82,
       "seatCount": 48,
       "tags": ["work-friendly", "dessert"],
       "recommendationScore": 91,
@@ -284,13 +275,11 @@ Nearby response shape:
         "ratingScore": 92,
         "distanceScore": 86,
         "workFriendlyScore": 92,
-        "quietScore": 82,
         "popularityScore": 66
       },
       "reasons": [
         "Very close to the selected point.",
-        "Wifi and power outlets make it good for working.",
-        "Quietness score is high for this dataset."
+        "Wifi and power outlets make it good for working."
       ]
     }
   ]

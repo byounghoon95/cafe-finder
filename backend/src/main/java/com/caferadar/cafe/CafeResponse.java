@@ -18,7 +18,6 @@ public record CafeResponse(
         LocalTime closesAt,
         boolean hasWifi,
         boolean hasPower,
-        int quietScore,
         int seatCount,
         List<String> tags
 ) {
@@ -38,7 +37,6 @@ public record CafeResponse(
                 cafe.getClosesAt(),
                 cafe.isHasWifi(),
                 cafe.isHasPower(),
-                cafe.getQuietScore(),
                 cafe.getSeatCount(),
                 List.of(cafe.getTags())
         );

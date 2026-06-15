@@ -84,11 +84,6 @@ public class Cafe {
     private boolean hasPower;
 
     @Min(0)
-    @Max(100)
-    @Column(name = "quiet_score", nullable = false)
-    private int quietScore;
-
-    @Min(0)
     @Column(name = "seat_count", nullable = false)
     private int seatCount;
 
@@ -121,7 +116,6 @@ public class Cafe {
             LocalTime closesAt,
             boolean hasWifi,
             boolean hasPower,
-            int quietScore,
             int seatCount,
             String[] tags
     ) {
@@ -137,7 +131,6 @@ public class Cafe {
         this.closesAt = closesAt;
         this.hasWifi = hasWifi;
         this.hasPower = hasPower;
-        this.quietScore = quietScore;
         this.seatCount = seatCount;
         this.tags = tags == null ? new String[0] : tags;
     }
@@ -192,10 +185,6 @@ public class Cafe {
 
     public boolean isHasPower() {
         return hasPower;
-    }
-
-    public int getQuietScore() {
-        return quietScore;
     }
 
     public int getSeatCount() {

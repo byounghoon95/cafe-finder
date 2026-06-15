@@ -11,7 +11,6 @@ const sortOptions: { value: CafeSort; label: string }[] = [
   { value: "distance", label: "거리순" },
   { value: "rating", label: "평점순" },
   { value: "reviews", label: "리뷰순" },
-  { value: "quiet", label: "조용한순" },
   { value: "recommendation", label: "추천순" },
 ];
 
@@ -31,7 +30,6 @@ export function SearchControls() {
     Number(filters.openNow) +
     Number(filters.hasWifi) +
     Number(filters.hasPower) +
-    Number(filters.quiet) +
     filters.priceLevels.length +
     filters.tags.length;
 
@@ -96,7 +94,6 @@ export function SearchControls() {
             ["openNow", "영업 중"],
             ["hasWifi", "와이파이"],
             ["hasPower", "콘센트"],
-            ["quiet", "조용함"],
           ].map(([filter, label]) => (
             <button
               className={`filter-chip ${
@@ -107,7 +104,7 @@ export function SearchControls() {
               key={filter}
               onClick={() =>
                 setBooleanFilter(
-                  filter as "openNow" | "hasWifi" | "hasPower" | "quiet",
+                  filter as "openNow" | "hasWifi" | "hasPower",
                   !filters[filter as keyof typeof filters],
                 )
               }

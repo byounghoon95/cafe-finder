@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement-task
 description: Implement one scoped CafeFinder task from a spec or task index. Use when the user says `$implement-task`, asks to implement a track-scoped task such as `backend TASK-01`, `frontend TASK-02`, or `infra TASK-01`, or wants Codex to execute a defined task while staying inside acceptance criteria, running verification, and updating task status notes.
 ---
